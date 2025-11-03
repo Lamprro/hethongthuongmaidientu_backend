@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="product_images")
-public class ProductImages {
+public class ProductsImages {
     @Id
     @Column(name="image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +17,13 @@ public class ProductImages {
     @JoinColumn(name="products_id")
     private Products products;
 
-    public ProductImages(int imageId, String imageUrl, Products products) {
+    public ProductsImages(int imageId, String imageUrl, Products products) {
         this.imageId = imageId;
         this.imageUrl = imageUrl;
         this.products = products;
     }
 
-    public ProductImages() {
+    public ProductsImages() {
     }
 
     public int getImageId() {
