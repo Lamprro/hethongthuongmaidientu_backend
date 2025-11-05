@@ -67,12 +67,4 @@ public class RolesDAOImplement implements RolesDAO {
 
         return new PageImpl<>(result, pageable, total);
     }
-
-    @Override
-    public void delete(int id) {
-        Roles role = entityManager.find(Roles.class, id);
-        if (role != null) {
-            entityManager.remove(role);
-        }
-    }
 }
