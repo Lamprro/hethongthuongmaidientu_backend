@@ -3,6 +3,8 @@ package Demo.Enity;
 import jakarta.persistence.*;
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 @Entity
 @Table(name="products")
 public class Products {
@@ -17,11 +19,15 @@ public class Products {
     @Column(name="description")
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name="categories_id")
-    private Categories categories;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name="products_categories",
+            joinColumns = @JoinColumn(name="products_id"),
+            inverseJoinColumns=@JoinColumn(name="categories_id")
+    )
+    private List<Categories> categories;
 
-    public Products(int productsId, String productsName, String description, Categories categories) {
+    public Products(int productsId, String productsName, String description, List<Categories> categories) {
         this.productsId = productsId;
         this.productsName = productsName;
         this.description = description;
@@ -55,11 +61,11 @@ public class Products {
         this.description = description;
     }
 
-    public Categories getCategories() {
+    public List<Categories> getCategories() {
         return categories;
     }
 
-    public void setCategories(Categories categories) {
+    public void setCategories(List<Categories> categories) {
         this.categories = categories;
     }
 }

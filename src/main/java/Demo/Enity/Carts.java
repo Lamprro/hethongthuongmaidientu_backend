@@ -10,17 +10,17 @@ public class Carts {
     @Id
     @Column(name="carts_id")
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int carts_id;
+    private int cartsId;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="users_id")
     private Users users;
 
     public Carts(int carts_id, LocalDateTime createdAt, Users users) {
-        this.carts_id = carts_id;
+        this.cartsId = carts_id;
         this.createdAt = createdAt;
         this.users = users;
     }
@@ -29,11 +29,11 @@ public class Carts {
     }
 
     public int getCarts_id() {
-        return carts_id;
+        return cartsId;
     }
 
     public void setCarts_id(int carts_id) {
-        this.carts_id = carts_id;
+        this.cartsId = carts_id;
     }
 
     public LocalDateTime getCreatedAt() {

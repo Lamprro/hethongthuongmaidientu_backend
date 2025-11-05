@@ -30,7 +30,7 @@ public class Users {
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="roles_id")
     private Roles roles;
 

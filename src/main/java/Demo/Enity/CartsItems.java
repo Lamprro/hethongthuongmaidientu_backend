@@ -17,7 +17,7 @@ public class CartsItems {
     @JoinColumn(name="carts_id")
     private Carts carts;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="products_stores_id")
     private ProductsStores productsStores;
 
