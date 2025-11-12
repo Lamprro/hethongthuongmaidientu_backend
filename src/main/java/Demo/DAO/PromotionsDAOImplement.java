@@ -30,15 +30,11 @@ public class PromotionsDAOImplement implements PromotionsDAO {
 
     @Override
     public Page<Promotions> findByStoresId(int id, Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM Promotions a WHERE a.stores.storesId = :id",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM Promotions a WHERE a.stores.storesId = :id", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
 
-        List<Promotions> result = entityManager.createQuery(
-                        "SELECT a FROM Promotions a WHERE a.stores.storesId = :id ORDER BY a.createdAt DESC",
-                        Promotions.class)
+        List<Promotions> result = entityManager.createQuery("SELECT a FROM Promotions a WHERE a.stores.storesId = :id ", Promotions.class)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -49,9 +45,7 @@ public class PromotionsDAOImplement implements PromotionsDAO {
 
     @Override
     public Promotions findById(int id) {
-        List<Promotions> result = entityManager.createQuery(
-                        "SELECT a FROM Promotions a WHERE a.promotionsId = :id",
-                        Promotions.class)
+        List<Promotions> result = entityManager.createQuery("SELECT a FROM Promotions a WHERE a.promotionsId = :id", Promotions.class)
                 .setParameter("id", id)
                 .getResultList();
         return result.isEmpty() ? null : result.get(0);
@@ -59,14 +53,10 @@ public class PromotionsDAOImplement implements PromotionsDAO {
 
     @Override
     public Page<Promotions> findAll(Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM Promotions a",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM Promotions a", Long.class)
                 .getSingleResult();
 
-        List<Promotions> result = entityManager.createQuery(
-                        "SELECT a FROM Promotions a ORDER BY a.createdAt DESC",
-                        Promotions.class)
+        List<Promotions> result = entityManager.createQuery("SELECT a FROM Promotions a ORDER BY a.createdAt DESC", Promotions.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

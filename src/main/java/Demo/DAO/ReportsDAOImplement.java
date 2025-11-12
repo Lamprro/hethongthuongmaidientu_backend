@@ -30,15 +30,11 @@ public class ReportsDAOImplement implements ReportsDAO {
 
     @Override
     public Page<Reports> findById(int id, Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM Reports a WHERE a.reportsId = :id",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM Reports a WHERE a.reportsId = :id", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
 
-        List<Reports> result = entityManager.createQuery(
-                        "SELECT a FROM Reports a WHERE a.reportsId = :id ORDER BY a.createdAt DESC",
-                        Reports.class)
+        List<Reports> result = entityManager.createQuery("SELECT a FROM Reports a WHERE a.reportsId = :id", Reports.class)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -49,15 +45,11 @@ public class ReportsDAOImplement implements ReportsDAO {
 
     @Override
     public Page<Reports> findByUsersId(int id, Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM Reports a WHERE a.users.usersId = :id",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM Reports a WHERE a.users.usersId = :id", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
 
-        List<Reports> result = entityManager.createQuery(
-                        "SELECT a FROM Reports a WHERE a.users.usersId = :id ORDER BY a.createdAt DESC",
-                        Reports.class)
+        List<Reports> result = entityManager.createQuery("SELECT a FROM Reports a WHERE a.users.usersId = :id ", Reports.class)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -68,14 +60,10 @@ public class ReportsDAOImplement implements ReportsDAO {
 
     @Override
     public Page<Reports> findAll(Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM Reports a",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM Reports a",Long.class)
                 .getSingleResult();
 
-        List<Reports> result = entityManager.createQuery(
-                        "SELECT a FROM Reports a ORDER BY a.createdAt DESC",
-                        Reports.class)
+        List<Reports> result = entityManager.createQuery("SELECT a FROM Reports a ", Reports.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

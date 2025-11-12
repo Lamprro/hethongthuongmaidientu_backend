@@ -37,14 +37,12 @@ public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
 
     @Override
     public Page<ProductsReviews> findByProductsStoresId(int id, Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id", Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
 
         List<ProductsReviews> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id ORDER BY a.createdAt DESC",
-                        ProductsReviews.class)
+                        "SELECT a FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id",ProductsReviews.class)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())

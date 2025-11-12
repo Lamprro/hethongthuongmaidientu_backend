@@ -34,15 +34,11 @@ public class RolesDAOImplement implements RolesDAO {
 
     @Override
     public Page<Roles> findByNames(String roleName, Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(r) FROM Roles r WHERE LOWER(r.roleName) LIKE LOWER(:roleName)",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(r) FROM Roles r WHERE LOWER(r.roleName) LIKE LOWER(:roleName)",Long.class)
                 .setParameter("roleName", "%" + roleName + "%")
                 .getSingleResult();
 
-        List<Roles> result = entityManager.createQuery(
-                        "SELECT r FROM Roles r WHERE LOWER(r.roleName) LIKE LOWER(:roleName)",
-                        Roles.class)
+        List<Roles> result = entityManager.createQuery("SELECT r FROM Roles r WHERE LOWER(r.roleName) LIKE LOWER(:roleName)", Roles.class)
                 .setParameter("roleName", "%" + roleName + "%")
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -53,14 +49,10 @@ public class RolesDAOImplement implements RolesDAO {
 
     @Override
     public Page<Roles> findAll(Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(r) FROM Roles r",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(r) FROM Roles r", Long.class)
                 .getSingleResult();
 
-        List<Roles> result = entityManager.createQuery(
-                        "SELECT r FROM Roles r ORDER BY r.roleName ASC",
-                        Roles.class)
+        List<Roles> result = entityManager.createQuery("SELECT r FROM Roles r ORDER BY r.roleName ASC", Roles.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

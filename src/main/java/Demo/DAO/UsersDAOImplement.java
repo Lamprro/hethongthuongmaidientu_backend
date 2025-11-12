@@ -29,8 +29,7 @@ public class UsersDAOImplement implements UsersDAO {
 
     @Override
     public Users findById(int id) {
-        List<Users> result = entityManager.createQuery(
-                        "SELECT u FROM Users u WHERE u.usersId = :id", Users.class)
+        List<Users> result = entityManager.createQuery("SELECT u FROM Users u WHERE u.usersId = :id", Users.class)
                 .setParameter("id", id)
                 .getResultList();
         return result.isEmpty() ? null : result.get(0);
@@ -39,16 +38,13 @@ public class UsersDAOImplement implements UsersDAO {
     @Override
     public Page<Users> findByUsersName(String name, Pageable pageable) {
         // Đếm tổng số bản ghi
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(u) FROM Users u WHERE LOWER(u.usersName) LIKE LOWER(:name)",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(u) FROM Users u WHERE LOWER(u.usersName) LIKE LOWER(:name)", Long.class)
                 .setParameter("name", "%" + name + "%")
                 .getSingleResult();
 
         // Lấy danh sách người dùng theo trang
         List<Users> result = entityManager.createQuery(
-                        "SELECT u FROM Users u WHERE LOWER(u.usersName) LIKE LOWER(:name) ORDER BY u.createdAt DESC",
-                        Users.class)
+                        "SELECT u FROM Users u WHERE LOWER(u.usersName) LIKE LOWER(:name)", Users.class)
                 .setParameter("name", "%" + name + "%")
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -59,12 +55,10 @@ public class UsersDAOImplement implements UsersDAO {
 
     @Override
     public Page<Users> findAll(Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(u) FROM Users u", Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(u) FROM Users u", Long.class)
                 .getSingleResult();
 
-        List<Users> result = entityManager.createQuery(
-                        "SELECT u FROM Users u ORDER BY u.createdAt DESC", Users.class)
+        List<Users> result = entityManager.createQuery("SELECT u FROM Users u ", Users.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

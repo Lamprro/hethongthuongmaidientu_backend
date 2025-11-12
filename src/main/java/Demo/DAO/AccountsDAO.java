@@ -1,6 +1,7 @@
 package Demo.DAO;
 
 import Demo.Enity.Accounts;
+import Demo.Enity.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

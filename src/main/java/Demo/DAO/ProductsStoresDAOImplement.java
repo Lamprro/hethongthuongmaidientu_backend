@@ -30,15 +30,11 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
 
     @Override
     public Page<ProductsStores> findByProductsId(int id, Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsStores a WHERE a.products.productsId = :id",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsStores a WHERE a.products.productsId = :id", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
 
-        List<ProductsStores> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsStores a WHERE a.products.productsId = :id ORDER BY a.createdAt DESC",
-                        ProductsStores.class)
+        List<ProductsStores> result = entityManager.createQuery("SELECT a FROM ProductsStores a WHERE a.products.productsId = :id", ProductsStores.class)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -49,14 +45,12 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
 
     @Override
     public Page<ProductsStores> findByStoresId(int id, Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsStores a WHERE a.stores.storesId = :id",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsStores a WHERE a.stores.storesId = :id",Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
 
         List<ProductsStores> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsStores a WHERE a.stores.storesId = :id ORDER BY a.createdAt DESC",
+                        "SELECT a FROM ProductsStores a WHERE a.stores.storesId = :id ",
                         ProductsStores.class)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
@@ -68,14 +62,10 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
 
     @Override
     public Page<ProductsStores> findAll(Pageable pageable) {
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsStores a",
-                        Long.class)
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsStores a", Long.class)
                 .getSingleResult();
 
-        List<ProductsStores> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsStores a ",
-                        ProductsStores.class)
+        List<ProductsStores> result = entityManager.createQuery("SELECT a FROM ProductsStores a ", ProductsStores.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
