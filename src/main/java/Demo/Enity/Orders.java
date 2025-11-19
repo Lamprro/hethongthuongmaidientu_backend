@@ -20,7 +20,7 @@ public class Orders {
     private String paymentMethod;
 
     @Column(name="status")
-    private String status;
+    private int status;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
@@ -36,7 +36,7 @@ public class Orders {
     @JoinColumn(name="stores_id")
     private Stores stores;
 
-    public Orders(int ordersId, Double totalAmount, String paymentMethod, String status, LocalDateTime createdAt, String shippingAddress, Stores stores, Users users) {
+    public Orders(int ordersId, Double totalAmount, String paymentMethod, int status, LocalDateTime createdAt, String shippingAddress, Stores stores, Users users) {
         this.ordersId = ordersId;
         this.totalAmount = totalAmount;
         this.paymentMethod = paymentMethod;
@@ -74,11 +74,11 @@ public class Orders {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

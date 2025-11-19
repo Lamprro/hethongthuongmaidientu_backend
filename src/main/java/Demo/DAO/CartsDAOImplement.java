@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public class CartsDAOImplement implements CartsDAO{
 
@@ -27,11 +29,11 @@ public class CartsDAOImplement implements CartsDAO{
     }
 
     @Override
-    public Carts findById(int id) {
+    public Optional<Carts> findById(int id) {
         List<Carts> result = entityManager.createQuery("SELECT a FROM Carts a WHERE a.cartsId=:cartsId",Carts.class)
                 .setParameter("cartsId",id)
                 .getResultList();
-        return result.isEmpty()?null: result.get(0);
+        return result.isEmpty()? Optional.empty(): Optional.of(result.get(0));
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AccountsDAOImplement implements AccountsDAO{
@@ -46,5 +47,21 @@ public class AccountsDAOImplement implements AccountsDAO{
                     .setParameter("userName",username)
                     .getResultList();
             return result.isEmpty()? null:result.get(0);
+    }
+
+    @Override
+    public boolean existsUsername(String username) {
+        List<Accounts> result = entityManager.createQuery("SELECT c FROM Accounts c WHERE c.userName= :userName",Accounts.class)
+                .setParameter("userName",username)
+                .getResultList();
+        return result.isEmpty()||result==null?false:true;
+    }
+
+    @Override
+    public Optional<Accounts> findById(int id) {
+        List<Accounts> result = entityManager.createQuery("SELECT a FROM Accounts a WHERE a.accountsId= :accountsId", Accounts.class)
+                .setParameter("accountsId", id)
+                .getResultList();
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 }

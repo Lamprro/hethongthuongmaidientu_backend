@@ -22,7 +22,7 @@ public class Stores {
     private String email;
 
     @Column(name = "status")
-    private String status;
+    private int status;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -31,7 +31,7 @@ public class Stores {
     @JoinColumn(name="users_id")
     private Users users;
 
-    public Stores(int storeId, String storesName, String storesAddress, String email, String status, LocalDateTime createdAt, Users users) {
+    public Stores(int storeId, String storesName, String storesAddress, String email, int status, LocalDateTime createdAt, Users users) {
         this.storeId = storeId;
         this.storesName = storesName;
         this.storesAddress = storesAddress;
@@ -76,11 +76,11 @@ public class Stores {
         this.email = email;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

@@ -20,7 +20,7 @@ public class ProductsStores {
     private int quantity;
 
     @Column(name="status")
-    private String status;
+    private int status;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
@@ -36,7 +36,7 @@ public class ProductsStores {
     @JoinColumn(name="stores_id")
     private Stores stores;
 
-    public ProductsStores(int productsStoresId, Double price, int quantity, String status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
+    public ProductsStores(int productsStoresId, Double price, int quantity, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
         this.productsStoresId = productsStoresId;
         this.price = price;
         this.quantity = quantity;
@@ -74,11 +74,11 @@ public class ProductsStores {
         this.quantity = quantity;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

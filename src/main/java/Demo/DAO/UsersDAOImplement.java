@@ -1,5 +1,6 @@
 package Demo.DAO;
 
+import Demo.Enity.Accounts;
 import Demo.Enity.Users;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UsersDAOImplement implements UsersDAO {
@@ -28,11 +30,11 @@ public class UsersDAOImplement implements UsersDAO {
     }
 
     @Override
-    public Users findById(int id) {
+    public Optional<Users> findById(int id) {
         List<Users> result = entityManager.createQuery("SELECT u FROM Users u WHERE u.usersId = :id", Users.class)
                 .setParameter("id", id)
                 .getResultList();
-        return result.isEmpty() ? null : result.get(0);
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
     @Override
@@ -64,5 +66,21 @@ public class UsersDAOImplement implements UsersDAO {
                 .getResultList();
 
         return new PageImpl<>(result, pageable, total);
+    }
+
+    @Override
+    public boolean exsistEmails(String email) {
+        List<Accounts> result = entityManager.createQuery("SELECT a FROM Accounts a WHERE a.usersEmail = :usersEmail",Accounts.class)
+                .setParameter("usersEmail",email)
+                .getResultList();
+        return (result.isEmpty()||result.get(0)==null)?false:true;
+    }
+
+    @Override
+    public Users findByEmails(String email) {
+        List<Users> result = entityManager.createQuery("SELECT a FROM Users a WHERE a.usersEmail = :usersEmail",Users.class)
+                .setParameter("usersEmail",email)
+                .getResultList();
+        return result.isEmpty()?null:result.get(0);
     }
 }

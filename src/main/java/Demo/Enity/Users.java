@@ -25,7 +25,7 @@ public class Users {
     private String usersAddress;
 
     @Column(name="status")
-    private String status;
+    private int status;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
@@ -34,7 +34,7 @@ public class Users {
     @JoinColumn(name="roles_id")
     private Roles roles;
 
-    public Users(int usersId, String usersName, String usersEmail, String usersAddress, String usersPhone, LocalDateTime createdAt, String status, Roles roles) {
+    public Users(int usersId, String usersName, String usersEmail, String usersAddress, String usersPhone, LocalDateTime createdAt, int status, Roles roles) {
         this.usersId = usersId;
         this.usersName = usersName;
         this.usersEmail = usersEmail;
@@ -88,11 +88,11 @@ public class Users {
         this.usersAddress = usersAddress;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
