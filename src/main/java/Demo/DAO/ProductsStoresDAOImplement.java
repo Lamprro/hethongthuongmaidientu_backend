@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -26,6 +27,14 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
     @Override
     public void update(ProductsStores productsStores) {
         entityManager.merge(productsStores);
+    }
+
+    @Override
+    public Optional<ProductsStores> findById(int id) {
+        List<ProductsStores> result = entityManager.createQuery("SELECT a FROM ProductsStores a WHERE a.productsStoresId = :id",ProductsStores.class)
+                .setParameter("id",id)
+                .getResultList();
+        return result.isEmpty()?Optional.empty():Optional.of(result.get(0));
     }
 
     @Override

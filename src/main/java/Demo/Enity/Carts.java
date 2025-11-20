@@ -19,8 +19,8 @@ public class Carts {
     @JoinColumn(name="users_id")
     private Users users;
 
-    public Carts(int carts_id, LocalDateTime createdAt, Users users) {
-        this.cartsId = carts_id;
+    public Carts(int cartsId, LocalDateTime createdAt, Users users) {
+        this.cartsId = cartsId;
         this.createdAt = createdAt;
         this.users = users;
     }
