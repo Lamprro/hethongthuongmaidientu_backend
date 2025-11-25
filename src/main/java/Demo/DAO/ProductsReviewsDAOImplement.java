@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
@@ -28,8 +30,8 @@ public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
     }
 
     @Override
-    public void delete(ProductsReviews productsReviews) {
-        ProductsReviews result = entityManager.find(ProductsReviews.class, productsReviews.getProductsReviewsId());
+    public void delete(int productsReviews) {
+        ProductsReviews result = entityManager.find(ProductsReviews.class, productsReviews);
         if (result != null) {
             entityManager.remove(result);
         }
@@ -52,20 +54,29 @@ public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
     }
 
     @Override
-    public Page<ProductsReviews> findByRating(double rating, Pageable pageable) {
+    public Page<ProductsReviews> findByRatingAndProductsStoresId(double rating,int id, Pageable pageable) {
         Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsReviews a WHERE a.rating = :rating", Long.class)
+                        "SELECT COUNT(a) FROM ProductsReviews a WHERE a.rating = :rating AND a.productsStores.productsStoresId = :productsStoresId", Long.class)
                 .setParameter("rating", rating)
+                .setParameter("productsStoresId",id)
                 .getSingleResult();
 
         List<ProductsReviews> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsReviews a WHERE a.rating = :rating ORDER BY a.createdAt DESC",
-                        ProductsReviews.class)
+                        "SELECT a FROM ProductsReviews a WHERE a.rating = :rating AND a.productsStores.productsStoresId = :productsStoresId", ProductsReviews.class)
                 .setParameter("rating", rating)
+                .setParameter("productsStoresId",id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
 
         return new PageImpl<>(result, pageable, total);
+    }
+
+    @Override
+    public Optional<ProductsReviews> findById(int productsReviewsId) {
+        List<ProductsReviews> result = entityManager.createQuery("SELECT a FROM ProductsReviews a WHERE a.productsReviewsId =:productsReviewsId",ProductsReviews.class)
+                .setParameter("productsReviewsId",productsReviewsId)
+                .getResultList();
+        return result.isEmpty()? Optional.empty():Optional.of(result.get(0));
     }
 }

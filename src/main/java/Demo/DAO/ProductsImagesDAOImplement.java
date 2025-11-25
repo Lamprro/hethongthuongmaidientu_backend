@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductsImagesDAOImplement implements ProductsImagesDAO{
@@ -60,5 +61,14 @@ public class ProductsImagesDAOImplement implements ProductsImagesDAO{
         if(result != null){
             entityManager.remove(result);
         }
+    }
+
+    @Override
+    public Optional<ProductsImages> findById(int id) {
+        List<ProductsImages> result = entityManager.createQuery("SELECT a FROM ProductsImages a WHERE a.imageId = :imageId ",ProductsImages.class)
+                .setParameter("imageId",id)
+                .getResultList();
+
+        return result.isEmpty()?Optional.empty():Optional.of(result.get(0));
     }
 }

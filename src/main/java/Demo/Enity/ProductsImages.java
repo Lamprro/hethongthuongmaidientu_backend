@@ -3,7 +3,7 @@ package Demo.Enity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="product_images")
+@Table(name="products_images")
 public class ProductsImages {
     @Id
     @Column(name="image_id")

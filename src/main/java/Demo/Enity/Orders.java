@@ -36,6 +36,16 @@ public class Orders {
     @JoinColumn(name="stores_id")
     private Stores stores;
 
+    public Orders(Double totalAmount, String paymentMethod, int status, String shippingAddress, LocalDateTime createdAt, Users users, Stores stores) {
+        this.totalAmount = totalAmount;
+        this.paymentMethod = paymentMethod;
+        this.status = status;
+        this.shippingAddress = shippingAddress;
+        this.createdAt = createdAt;
+        this.users = users;
+        this.stores = stores;
+    }
+
     public Orders(int ordersId, Double totalAmount, String paymentMethod, int status, LocalDateTime createdAt, String shippingAddress, Stores stores, Users users) {
         this.ordersId = ordersId;
         this.totalAmount = totalAmount;

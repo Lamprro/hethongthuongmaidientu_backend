@@ -9,10 +9,14 @@ import Demo.Enity.Notification;
 import Demo.Enity.ProductsStores;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,18 +33,12 @@ public class CartsItemsServiceImplement implements CartsItemsService {
     private ProductsStoresDAO productsStoresDAO;
 
     @Override
-    public ResponseEntity<?> create(JsonNode jsonNode) {
+    @Transactional
+    public ResponseEntity<?> create(CartsItems cartsItems, int productsStoresId, int cartsId) {
         try {
-            // Chuyển JSON thành object
-            CartsItems cartsItems = objectMapper.treeToValue(jsonNode, CartsItems.class);
-
-            // Lấy sản phẩm
-            int productsStoresId = jsonNode.get("productsStoresId").asInt();
             ProductsStores productsStores = productsStoresDAO.findById(productsStoresId)
                     .orElseThrow(() -> new RuntimeException("ProductsStores không tồn tại"));
 
-            // Lấy giỏ hàng
-            int cartsId = jsonNode.get("cartsId").asInt();
             Carts carts = cartsDAO.findById(cartsId)
                     .orElseThrow(() -> new RuntimeException("Carts không tồn tại"));
 
@@ -75,11 +73,9 @@ public class CartsItemsServiceImplement implements CartsItemsService {
     }
 
     @Override
-    public ResponseEntity<?> update(JsonNode jsonNode) {
+    @Transactional
+    public ResponseEntity<?> update(int cartsItemsId, int quantity) {
         try {
-            int cartsItemsId = jsonNode.get("idCart").asInt();
-            int quantity = jsonNode.get("quantity").asInt();
-
             CartsItems cartsItems = cartsItemsDAO.findById(cartsItemsId)
                     .orElseThrow(() -> new RuntimeException("CartsItems không tồn tại"));
 
@@ -94,6 +90,7 @@ public class CartsItemsServiceImplement implements CartsItemsService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> delete(int cartsItemsId) {
         try {
             // Kiểm tra tồn tại
@@ -105,6 +102,33 @@ public class CartsItemsServiceImplement implements CartsItemsService {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(new Notification("Lỗi hệ thống"));
+        }
+    }
+
+    @Override
+    public Page<CartsItems> findByCartsId(int cartsId, Pageable pageable) {
+        return cartsItemsDAO.findByCartsId(cartsId,pageable);
+    }
+
+    @Override
+    public Page<CartsItems> search(String text, String getCartsId, Pageable pageable) {
+        if(getCartsId.isEmpty()||getCartsId.trim().isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Thiếu trường cartsId");
+        }
+        int cartsId;
+        try{
+            cartsId = Integer.parseInt(getCartsId);
+            if(text.isEmpty()||text.trim().isEmpty()){
+                return cartsItemsDAO.findByCartsId(cartsId,pageable);
+            }
+            Page<CartsItems> findByName = cartsItemsDAO.findByProductsStoresProductsNames(text,cartsId,pageable);
+            if(findByName.getTotalElements()==0){
+                return cartsItemsDAO.findByProductsStoresStoresName(text,cartsId,pageable);
+            }
+            return findByName;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Lỗi hệ thống");
         }
     }
 }

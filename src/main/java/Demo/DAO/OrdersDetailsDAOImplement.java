@@ -41,4 +41,20 @@ public class OrdersDetailsDAOImplement implements OrdersDetailsDAO{
 
         return new PageImpl<>(result,pageable,total);
     }
+
+    @Override
+    public Page<OrdersDetails> findByProductsId(int id, Pageable pageable) {
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM OrdersDetails a WHERE a.productsStores.products.productsId = :productsId",Long.class)
+                .setParameter("productsId",id)
+                .getSingleResult();
+
+        List<OrdersDetails> result = entityManager.createQuery("SELECT COUNT(a) FROM OrdersDetails a WHERE a.productsStores.products.productsId = :productsId",OrdersDetails.class)
+                .setParameter("productsId",id)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+
+        return new PageImpl<>(result,pageable,total);
+    }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -30,8 +31,8 @@ public class StoresDAOImplement implements StoresDAO {
 
 
     @Override
-    public Stores findById(int id) {
-        return entityManager.find(Stores.class, id);
+    public Optional<Stores> findById(int id) {
+        return Optional.ofNullable(entityManager.find(Stores.class, id));
     }
 
     @Override

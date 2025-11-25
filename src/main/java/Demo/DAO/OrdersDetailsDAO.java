@@ -8,4 +8,5 @@ public interface OrdersDetailsDAO {
     public void create(OrdersDetails ordersDetails);
     public void update(OrdersDetails ordersDetails);
     public Page<OrdersDetails> findByOrdersId(int id, Pageable pageable);
+    public Page<OrdersDetails> findByProductsId(int id,Pageable pageable);
 }

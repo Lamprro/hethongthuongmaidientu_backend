@@ -10,7 +10,7 @@ public class Stores {
     @Id
     @Column(name = "stores_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int storeId;
+    private int storesId;
 
     @Column(name = "stores_name")
     private String storesName;
@@ -31,8 +31,8 @@ public class Stores {
     @JoinColumn(name="users_id")
     private Users users;
 
-    public Stores(int storeId, String storesName, String storesAddress, String email, int status, LocalDateTime createdAt, Users users) {
-        this.storeId = storeId;
+    public Stores(int storesId, String storesName, String storesAddress, String email, int status, LocalDateTime createdAt, Users users) {
+        this.storesId = storesId;
         this.storesName = storesName;
         this.storesAddress = storesAddress;
         this.email = email;
@@ -45,11 +45,11 @@ public class Stores {
     }
 
     public int getStoreId() {
-        return storeId;
+        return storesId;
     }
 
     public void setStoreId(int storeId) {
-        this.storeId = storeId;
+        this.storesId = storeId;
     }
 
     public String getStoresName() {

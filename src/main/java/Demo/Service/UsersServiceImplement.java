@@ -20,9 +20,8 @@ public class UsersServiceImplement implements UsersService{
 
     @Override
     @Transactional
-    public ResponseEntity<?> updateProfile(JsonNode jsonNode) {
+    public ResponseEntity<?> updateProfile(Users usersRequest) {
         try {
-            Users usersRequest = objectMapper.treeToValue(jsonNode, Users.class);
 
             Users user = usersDAO.findById(usersRequest.getUsersId())
                     .orElseThrow(() -> new RuntimeException("User không tồn tại"));

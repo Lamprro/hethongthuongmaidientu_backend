@@ -64,4 +64,34 @@ public class CartsItemsDAOImplement implements CartsItemsDAO {
                 .getResultList();
         return new PageImpl<>(result,pageable,total);
     }
+
+    @Override
+    public Page<CartsItems> findByProductsStoresProductsNames(String name,int cartsId,Pageable pageable) {
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM CartsItems a WHERE LOWER(a.productsStores.products.productsName) LIKE LOWER(:productsName) AND a.carts.cartsId=:cartsId ", Long.class)
+                .setParameter("productsName","%"+name+"%")
+                .setParameter("cartsId",cartsId)
+                .getSingleResult();
+        List<CartsItems> result = entityManager.createQuery("SELECT a FROM CartsItems a WHERE LOWER(a.productsStores.products.productsName) LIKE LOWER(:productsName) AND a.carts.cartsId=:cartsId",CartsItems.class)
+                .setParameter("productsName","%"+name+"%")
+                .setParameter("cartsId",cartsId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+        return new PageImpl<>(result,pageable,total);
+    }
+
+    @Override
+    public Page<CartsItems> findByProductsStoresStoresName(String name,int cartsId,Pageable pageable) {
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM CartsItems a WHERE LOWER(a.productsStores.stores.storesName) LIKE LOWER(:storesName) AND a.carts.cartsId=:cartsId", Long.class)
+                .setParameter("storesName","%"+name+"%")
+                .setParameter("cartsId",cartsId)
+                .getSingleResult();
+        List<CartsItems> result = entityManager.createQuery("SELECT a FROM CartsItems a WHERE LOWER(a.productsStores.stores.storesName) LIKE LOWER(:storesName) AND a.carts.cartsId=:cartsId",CartsItems.class)
+                .setParameter("storesName","%"+name+"%")
+                .setParameter("cartsId",cartsId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+        return new PageImpl<>(result,pageable,total);
+    }
 }

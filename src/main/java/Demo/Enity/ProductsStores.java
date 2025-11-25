@@ -19,6 +19,9 @@ public class ProductsStores {
     @Column(name="quantity")
     private int quantity;
 
+    @Column(name="average_rating")
+    private int averageRating;
+
     @Column(name="status")
     private int status;
 
@@ -36,18 +39,16 @@ public class ProductsStores {
     @JoinColumn(name="stores_id")
     private Stores stores;
 
-    public ProductsStores(int productsStoresId, Double price, int quantity, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
+    public ProductsStores(int productsStoresId, Double price, int quantity, int averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
         this.productsStoresId = productsStoresId;
         this.price = price;
         this.quantity = quantity;
+        this.averageRating = averageRating;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.products = products;
         this.stores = stores;
-    }
-
-    public ProductsStores() {
     }
 
     public int getProductsStoresId() {
@@ -72,6 +73,14 @@ public class ProductsStores {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(int averageRating) {
+        this.averageRating = averageRating;
     }
 
     public int getStatus() {
