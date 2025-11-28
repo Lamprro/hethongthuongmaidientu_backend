@@ -9,6 +9,6 @@ public interface ProductsReviewsService {
     public ResponseEntity<?> create(ProductsReviews productsReviews);
     public ResponseEntity<?> update(ProductsReviews productsReviews);
     public ResponseEntity<?> delete(int productsReviewsId);
-    public Page<ProductsReviews> findByProductsId(int productsId,Pageable pageable);
+    public Page<ProductsReviews> findByProductsStoresId(int productsId,Pageable pageable);
     public Page<ProductsReviews> findByRatingAndProductsId(double rating, int productsId, Pageable pageable);
 }

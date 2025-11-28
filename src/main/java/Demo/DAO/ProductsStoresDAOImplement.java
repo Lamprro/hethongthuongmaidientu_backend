@@ -1,5 +1,6 @@
 package Demo.DAO;
 
+import Demo.Enity.ProductsReviews;
 import Demo.Enity.ProductsStores;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
     public void update(ProductsStores productsStores) {
         entityManager.merge(productsStores);
     }
+
+
 
     @Override
     public Optional<ProductsStores> findById(int id) {
@@ -81,4 +84,23 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
 
         return new PageImpl<>(result, pageable, total);
     }
+
+    @Override
+    public Page<ProductsStores> findByProductsIdAndStoresId(int productsId, int storesId, Pageable pageable) {
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsStores a WHERE a.products.productsId=:productsId AND a.stores.storesId=:storesId", Long.class)
+                .setParameter("productsId",productsId)
+                .setParameter("storesId",storesId)
+                .getSingleResult();
+
+        List<ProductsStores> result = entityManager.createQuery("SELECT a FROM ProductsStores a WHERE a.products.productsId=:productsId AND a.stores.storesId=:storesId", ProductsStores.class)
+                .setParameter("productsId",productsId)
+                .setParameter("storesId",storesId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+
+        return new PageImpl<>(result, pageable, total);
+    }
+
+
 }

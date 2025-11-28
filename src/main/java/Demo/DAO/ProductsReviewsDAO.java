@@ -14,4 +14,5 @@ public interface ProductsReviewsDAO {
     public Page<ProductsReviews> findByProductsStoresId(int id, Pageable pageable);
     public Page<ProductsReviews> findByRatingAndProductsStoresId(double rating,int id, Pageable pageable);
     public Optional<ProductsReviews> findById(int productsReviewsId);
+    public void updateAverageRating(int productsStoresId);
 }

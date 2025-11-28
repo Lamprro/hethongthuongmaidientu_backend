@@ -20,15 +20,15 @@ import java.util.stream.Collectors;
 @Service
 public class OrdersDetailsServiceImplement implements OrdersDetailsService {
     @Autowired
-    OrdersDAO ordersDAO;
+    private OrdersDAO ordersDAO;
     @Autowired
-    ProductsStoresDAO productsStoresDAO;
+    private ProductsStoresDAO productsStoresDAO;
     @Autowired
-    OrdersDetailsDAO ordersDetailsDAO;
+    private OrdersDetailsDAO ordersDetailsDAO;
     @Autowired
-    UsersDAO usersDAO;
+    private UsersDAO usersDAO;
     @Autowired
-    StoresDAO storesDAO;
+    private StoresDAO storesDAO;
     @Override
     @Transactional
     public ResponseEntity<?> create(List<OrdersDetails> ordersDetails, int userId) {
@@ -56,7 +56,15 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
                 for(OrdersDetails o: groupByStore.get(storedId)){
                     o.setOrders(orders);
                     total+=o.getSubsTotal();
+                    ProductsStores productsStores = productsStoresDAO.findById(o.getProductsStores().getProductsStoresId())
+                            .orElseThrow(() -> new RuntimeException("Product store không tồn tại"));
+                    if((productsStores.getQuantity()-o.getQuantity())<=0){
+                        return ResponseEntity.ok("Đã hết hàng của Product store này");
+                    }
+                    else{
+                        productsStores.setQuantity(productsStores.getQuantity()-o.getQuantity());
                     ordersDetailsDAO.create(o);
+                    }
                 }
                 // các thuộc tính default
                 orders.setTotalAmount(total);

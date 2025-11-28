@@ -1,5 +1,6 @@
 package Demo.DAO;
 
+import Demo.Enity.ProductsStores;
 import Demo.Enity.Promotions;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,4 +64,24 @@ public class PromotionsDAOImplement implements PromotionsDAO {
 
         return new PageImpl<>(result, pageable, total);
     }
+
+    @Override
+    public void updateProductsStoresPrice(int storesId,double discount) {
+        List<ProductsStores> productsStoresList = entityManager.createQuery("SELECT a FROM ProductsStores a WHERE a.stores.storesId=:storesId", ProductsStores.class)
+                .setParameter("storesId",storesId)
+                .getResultList();
+
+        for(ProductsStores i : productsStoresList){
+            i.setPrice(i.getPrice()*(100-discount)/100);
+            entityManager.merge(i);
+        }
+    }
+    @Override
+    public List<Promotions> findExpiredPromotions() {
+        return entityManager.createQuery(
+                "SELECT p FROM Promotions p WHERE p.endedAt < CURRENT_TIMESTAMP ",
+                Promotions.class
+        ).getResultList();
+    }
+
 }

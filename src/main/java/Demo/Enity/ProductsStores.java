@@ -13,6 +13,9 @@ public class ProductsStores {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int productsStoresId;
 
+    @Column(name="originalPrice")
+    private Double originalPrice;
+
     @Column(name="price")
     private Double price;
 
@@ -20,7 +23,7 @@ public class ProductsStores {
     private int quantity;
 
     @Column(name="average_rating")
-    private int averageRating;
+    private double averageRating;
 
     @Column(name="status")
     private int status;
@@ -39,8 +42,10 @@ public class ProductsStores {
     @JoinColumn(name="stores_id")
     private Stores stores;
 
-    public ProductsStores(int productsStoresId, Double price, int quantity, int averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
+
+    public ProductsStores(int productsStoresId, Double originalPrice, Double price, int quantity, double averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
         this.productsStoresId = productsStoresId;
+        this.originalPrice = originalPrice;
         this.price = price;
         this.quantity = quantity;
         this.averageRating = averageRating;
@@ -59,6 +64,14 @@ public class ProductsStores {
         this.productsStoresId = productsStoresId;
     }
 
+    public Double getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(Double originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
     public Double getPrice() {
         return price;
     }
@@ -75,11 +88,11 @@ public class ProductsStores {
         this.quantity = quantity;
     }
 
-    public int getAverageRating() {
+    public double getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(int averageRating) {
+    public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
     }
 

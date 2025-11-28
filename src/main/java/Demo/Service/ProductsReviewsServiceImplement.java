@@ -6,6 +6,7 @@ import Demo.DAO.UsersDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.ProductsImages;
 import Demo.Enity.ProductsReviews;
+import Demo.Enity.ProductsStores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,7 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
             usersDAO.findById(productsReviews.getUsers().getUsersId())
                     .orElseThrow(() -> new RuntimeException("User không tồn tại"));
             productsReviewsDAO.create(productsReviews);
+            productsReviewsDAO.updateAverageRating(productsReviews.getProductsStores().getProductsStoresId());
             return ResponseEntity.ok("Tạo Product Review thành công");
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,6 +45,7 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
             productsReviewsDAO.findById(productsReviews.getProductsReviewsId())
                     .orElseThrow(() -> new RuntimeException("Product review không tồn tại"));
             productsReviewsDAO.update(productsReviews);
+            productsReviewsDAO.updateAverageRating(productsReviews.getProductsStores().getProductsStoresId());
             return ResponseEntity.ok("Cập nhật Product Review thành công");
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,9 +56,11 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
     @Override
     public ResponseEntity<?> delete(int productsReviewsId) {
         try{
-            productsReviewsDAO.findById(productsReviewsId)
+            ProductsReviews productsReviews=productsReviewsDAO.findById(productsReviewsId)
                     .orElseThrow(() -> new RuntimeException("Product review không tồn tại"));
-            productsReviewsDAO.delete(productsReviewsId);
+            ProductsStores productsStores = productsReviews.getProductsStores();
+                    productsReviewsDAO.delete(productsReviewsId);
+            productsReviewsDAO.updateAverageRating(productsStores.getProductsStoresId());
             return ResponseEntity.ok("Xóa Product Review thành công");
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,11 +69,11 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
     }
 
     @Override
-    public Page<ProductsReviews> findByProductsId(int productsId, Pageable pageable) {
+    public Page<ProductsReviews> findByProductsStoresId(int productsStoresId, Pageable pageable) {
         try {
-            productsStoresDAO.findById(productsId)
+            productsStoresDAO.findById(productsStoresId)
                     .orElseThrow(() -> new RuntimeException("Product store không tồn tại"));
-            return productsReviewsDAO.findByProductsStoresId(productsId, pageable);
+            return productsReviewsDAO.findByProductsStoresId(productsStoresId, pageable);
         } catch (Exception e) {
             e.printStackTrace();
             return Page.empty(pageable);

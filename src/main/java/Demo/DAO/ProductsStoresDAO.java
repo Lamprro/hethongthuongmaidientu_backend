@@ -1,5 +1,6 @@
 package Demo.DAO;
 
+import Demo.Enity.ProductsReviews;
 import Demo.Enity.ProductsStores;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,5 @@ public interface ProductsStoresDAO {
     public Page<ProductsStores> findByProductsId(int id, Pageable pageable);
     public Page<ProductsStores> findByStoresId(int id, Pageable pageable);
     public Page<ProductsStores> findAll(Pageable pageable);
+    public Page<ProductsStores> findByProductsIdAndStoresId(int productsId,int storesId, Pageable pageable);
 }
