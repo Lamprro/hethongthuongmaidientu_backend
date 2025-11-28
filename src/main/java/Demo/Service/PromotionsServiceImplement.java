@@ -4,6 +4,7 @@ import Demo.DAO.PromotionsDAO;
 import Demo.DAO.StoresDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.Promotions;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ public class PromotionsServiceImplement implements PromotionsService{
     @Autowired
     private StoresDAO storesDAO;
     @Override
+    @Transactional
     public ResponseEntity<?> create(Promotions promotions) {
         try{
             promotionsDAO.create(promotions);
@@ -30,6 +32,7 @@ public class PromotionsServiceImplement implements PromotionsService{
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(Promotions promotions) {
         try{
             storesDAO.findById(promotions.getStores().getStoreId())
@@ -43,6 +46,7 @@ public class PromotionsServiceImplement implements PromotionsService{
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> updateProductsStoresPrice(int storesId,double discount) {
         try{
             storesDAO.findById(storesId)

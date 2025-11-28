@@ -4,6 +4,7 @@ import Demo.DAO.ProductsDAO;
 import Demo.DAO.ProductsImagesDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.ProductsImages;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public class ProductsImagesServiceImplement implements ProductsImagesService {
     @Autowired
     private ProductsDAO productsDAO;
     @Override
+    @Transactional
     public ResponseEntity<?> create(ProductsImages productsImages) {
         try{
             productsDAO.findById(productsImages.getProducts().getProductsId())
@@ -31,6 +33,7 @@ public class ProductsImagesServiceImplement implements ProductsImagesService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(ProductsImages productsImages) {
         try{
             productsImagesDAO.findById(productsImages.getImageId())
@@ -44,6 +47,7 @@ public class ProductsImagesServiceImplement implements ProductsImagesService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> delete(int productsImages) {
         try{
             productsImagesDAO.findById(productsImages)

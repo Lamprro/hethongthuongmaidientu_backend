@@ -18,6 +18,7 @@ public class StoresServiceImplement implements StoresService {
     @Autowired
     private UsersDAO usersDAO;
     @Override
+    @Transactional
     public ResponseEntity<?> create(Stores stores) {
         try{
             storesDAO.create(stores);

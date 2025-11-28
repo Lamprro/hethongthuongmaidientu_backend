@@ -3,6 +3,7 @@ package Demo.Service;
 import Demo.DAO.ProductsDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.Products;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ public class ProductsServiceImplement implements ProductsService {
     private ProductsDAO productsDAO;
 
     @Override
+    @Transactional
     public ResponseEntity<?> create(Products products) {
         try{
             productsDAO.create(products);
@@ -28,6 +30,7 @@ public class ProductsServiceImplement implements ProductsService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(Products products) {
         try{
             productsDAO.findById(products.getProductsId())

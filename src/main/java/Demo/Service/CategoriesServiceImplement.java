@@ -2,6 +2,7 @@ package Demo.Service;
 
 import Demo.DAO.CategoriesDAO;
 import Demo.Enity.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ public class CategoriesServiceImplement implements CategoriesService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> create(Categories categories) {
         try{
 
@@ -46,6 +48,7 @@ public class CategoriesServiceImplement implements CategoriesService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(Categories categories) {
         try{
             categoriesDAO.findById(categories.getCategoriesId())

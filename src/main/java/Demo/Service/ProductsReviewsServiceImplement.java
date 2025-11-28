@@ -7,6 +7,7 @@ import Demo.Enity.Notification;
 import Demo.Enity.ProductsImages;
 import Demo.Enity.ProductsReviews;
 import Demo.Enity.ProductsStores;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
 
 
     @Override
+    @Transactional
     public ResponseEntity<?> create(ProductsReviews productsReviews) {
         try{
             productsStoresDAO.findById(productsReviews.getProductsStores().getProductsStoresId())
@@ -40,6 +42,7 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(ProductsReviews productsReviews) {
         try{
             productsReviewsDAO.findById(productsReviews.getProductsReviewsId())
@@ -54,6 +57,7 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> delete(int productsReviewsId) {
         try{
             ProductsReviews productsReviews=productsReviewsDAO.findById(productsReviewsId)

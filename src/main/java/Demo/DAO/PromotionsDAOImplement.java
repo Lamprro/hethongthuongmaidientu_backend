@@ -31,6 +31,15 @@ public class PromotionsDAOImplement implements PromotionsDAO {
 
     @Override
     public Page<Promotions> findByStoresId(int id, Pageable pageable) {
+        if (pageable.isUnpaged()) {
+            List<Promotions> result = entityManager.createQuery(
+                            "SELECT a FROM Promotions a WHERE a.stores.storesId = :id", Promotions.class)
+                    .setParameter("id", id)
+                    .getResultList();
+
+            return new PageImpl<>(result); // không cần pageable, không cần total
+        }
+
         Long total = entityManager.createQuery("SELECT COUNT(a) FROM Promotions a WHERE a.stores.storesId = :id", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();

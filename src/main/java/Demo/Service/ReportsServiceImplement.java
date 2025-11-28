@@ -4,6 +4,7 @@ import Demo.DAO.ReportsDAO;
 import Demo.DAO.UsersDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.Reports;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public class ReportsServiceImplement implements ReportsService {
     private UsersDAO usersDAO;
 
     @Override
+    @Transactional
     public ResponseEntity<?> create(Reports reports) {
         try{
             reportsDAO.create(reports);
@@ -29,6 +31,7 @@ public class ReportsServiceImplement implements ReportsService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(Reports reports) {
         try{
             usersDAO.findById(reports.getUsers().getUsersId())

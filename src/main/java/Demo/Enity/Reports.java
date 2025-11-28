@@ -15,6 +15,9 @@ public class Reports {
     @Column(name="comment")
     private String comment;
 
+    @Column(name="reply")
+    private String reply;
+
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
@@ -22,14 +25,12 @@ public class Reports {
     @JoinColumn(name="users_id")
     private Users users;
 
-    public Reports(int reportsId, String comment, LocalDateTime createdAt, Users users) {
-        this.reportsId = reportsId;
+    public Reports(String comment, int reportsId, String reply, LocalDateTime createdAt, Users users) {
         this.comment = comment;
+        this.reportsId = reportsId;
+        this.reply = reply;
         this.createdAt = createdAt;
         this.users = users;
-    }
-
-    public Reports() {
     }
 
     public int getReportsId() {
@@ -54,6 +55,14 @@ public class Reports {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
     }
 
     public Users getUsers() {

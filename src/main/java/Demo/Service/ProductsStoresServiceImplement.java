@@ -6,6 +6,7 @@ import Demo.DAO.StoresDAO;
 import Demo.Enity.Categories;
 import Demo.Enity.Notification;
 import Demo.Enity.ProductsStores;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ public class ProductsStoresServiceImplement implements ProductsStoresService {
     @Autowired
     private StoresDAO storesDAO;
     @Override
+    @Transactional
     public ResponseEntity<?> create(ProductsStores productsStores) {
         try{
             productsStoresDAO.create(productsStores);
@@ -34,6 +36,7 @@ public class ProductsStoresServiceImplement implements ProductsStoresService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> update(ProductsStores productsStores) {
         try{
             productsStoresDAO.findById(productsStores.getProductsStoresId())
