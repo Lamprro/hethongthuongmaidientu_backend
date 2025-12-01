@@ -8,4 +8,5 @@ public interface AccountsService {
     public ResponseEntity<?> create(JsonNode accountJson);
 
     public ResponseEntity<?> changeUsernamePassword(JsonNode accountsJson);
+    public ResponseEntity<?> findById(int accountsId);
 }

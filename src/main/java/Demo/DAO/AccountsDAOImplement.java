@@ -43,7 +43,7 @@ public class AccountsDAOImplement implements AccountsDAO{
 
     @Override
     public Accounts findByUsername(String username) {
-            List<Accounts> result = entityManager.createQuery("SELECT a FROM Accounts a WHERE a.userName= :userName",Accounts.class)
+            List<Accounts> result = entityManager.createQuery("SELECT a FROM Accounts a WHERE a.username= :userName",Accounts.class)
                     .setParameter("userName",username)
                     .getResultList();
             return result.isEmpty()? null:result.get(0);
@@ -51,10 +51,10 @@ public class AccountsDAOImplement implements AccountsDAO{
 
     @Override
     public boolean existsUsername(String username) {
-        List<Accounts> result = entityManager.createQuery("SELECT c FROM Accounts c WHERE c.userName= :userName",Accounts.class)
+        List<Accounts> result = entityManager.createQuery("SELECT c FROM Accounts c WHERE c.username= :userName",Accounts.class)
                 .setParameter("userName",username)
                 .getResultList();
-        return result.isEmpty()||result==null?false:true;
+        return (result.isEmpty()||result==null)?true:false;
     }
 
     @Override

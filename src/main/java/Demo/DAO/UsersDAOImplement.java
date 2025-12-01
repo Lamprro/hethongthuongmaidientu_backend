@@ -70,7 +70,7 @@ public class UsersDAOImplement implements UsersDAO {
 
     @Override
     public boolean exsistEmails(String email) {
-        List<Accounts> result = entityManager.createQuery("SELECT a FROM Accounts a WHERE a.usersEmail = :usersEmail",Accounts.class)
+        List<Users> result = entityManager.createQuery("SELECT a FROM Users a WHERE a.usersEmail = :usersEmail",Users.class)
                 .setParameter("usersEmail",email)
                 .getResultList();
         return (result.isEmpty()||result.get(0)==null)?false:true;

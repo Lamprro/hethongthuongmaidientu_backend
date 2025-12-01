@@ -48,6 +48,8 @@ public class AccountsServiceImplement implements AccountsService{
         try{
             Accounts accounts = objectMapper.treeToValue(accountsJson,Accounts.class);
             Users users = objectMapper.treeToValue(accountsJson, Users.class);
+            System.out.println(accounts.getUsername());
+            System.out.println(accounts.getPassword());
             Roles rolesRequest = objectMapper.treeToValue(accountsJson, Roles.class);
             Roles roles = rolesDAO.findById(rolesRequest.getRolesId());
             if(usersDAO.exsistEmails(users.getUsersEmail())){
@@ -95,6 +97,18 @@ public class AccountsServiceImplement implements AccountsService{
             accounts.setPassword(accountRequest.getPassword());
             accountsDAO.update(accounts);
             return ResponseEntity.ok("Cập nhật thông tin tài khoản thành công");
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Lỗi hệ thống");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> findById(int accountsId) {
+        try{
+            Accounts accounts = accountsDAO.findById(accountsId)
+                    .orElseThrow(()-> new RuntimeException("Account không tồn tại"));
+            return ResponseEntity.ok(accounts);
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body("Lỗi hệ thống");
