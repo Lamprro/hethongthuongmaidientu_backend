@@ -3,6 +3,7 @@ package Demo.DAO;
 import Demo.Enity.Orders;
 import Demo.Enity.OrdersDetails;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +26,14 @@ public class OrdersDetailsDAOImplement implements OrdersDetailsDAO{
     @Override
     public void update(OrdersDetails ordersDetails) {
         entityManager.merge(ordersDetails);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByOrdersId(int ordersId) {
+         entityManager.createQuery("DELETE FROM OrdersDetails a WHERE a.orders.ordersId=:ordersId")
+                .setParameter("ordersId",ordersId)
+                .executeUpdate();
     }
 
     @Override

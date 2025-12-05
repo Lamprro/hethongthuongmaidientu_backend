@@ -11,7 +11,7 @@ public interface OrdersService {
     public ResponseEntity<?> create(Orders orders);
     public ResponseEntity<?> update(Orders orders);
     public ResponseEntity<?> delete(int ordersId);
-    public ResponseEntity<?> findById(int id);
+    public Page<Orders> findById(int id);
     public Page<Orders> findByUsersId(int id, Pageable pageable);
     public Page<Orders> findByStoresId(int id, Pageable pageable);
 }

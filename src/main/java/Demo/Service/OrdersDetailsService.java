@@ -13,4 +13,5 @@ public interface OrdersDetailsService {
     public ResponseEntity<?> create(List<OrdersDetails> ordersDetails, int userId);
     public Page<OrdersDetails> findByOrdersId(int ordersId, Pageable pageable);
     public Page<OrdersDetails> findByProductsId(int productsId,Pageable pageable);
+    public ResponseEntity<?> delete(int ordersId);
 }

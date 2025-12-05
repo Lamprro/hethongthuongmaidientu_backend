@@ -78,7 +78,6 @@ public class CartsItemsServiceImplement implements CartsItemsService {
         try {
             CartsItems cartsItems = cartsItemsDAO.findById(cartsItemsId)
                     .orElseThrow(() -> new RuntimeException("CartsItems không tồn tại"));
-
             cartsItems.setQuantity(quantity);
             cartsItemsDAO.update(cartsItems);
 

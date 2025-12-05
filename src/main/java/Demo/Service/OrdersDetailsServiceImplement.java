@@ -88,4 +88,19 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
     public Page<OrdersDetails> findByProductsId(int productsId, Pageable pageable) {
         return ordersDetailsDAO.findByProductsId(productsId,pageable);
     }
+
+    @Override
+    public ResponseEntity<?> delete(int ordersId) {
+        try{
+            ordersDetailsDAO.deleteByOrdersId(ordersId);
+            ordersDAO.delete(ordersId);
+            return ResponseEntity.ok("Xóa OrdersDetails và Orders thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(new Notification("Lỗi hệ thống"));
+
+        }
+
+
+    }
 }

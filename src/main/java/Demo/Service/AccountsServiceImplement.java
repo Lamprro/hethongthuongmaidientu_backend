@@ -42,26 +42,27 @@ public class AccountsServiceImplement implements AccountsService{
     private CartsService cartsService;
 
 
+
     @Override
     @Transactional
     public ResponseEntity<?> create(JsonNode accountsJson) {
         try{
             Accounts accounts = objectMapper.treeToValue(accountsJson,Accounts.class);
             Users users = objectMapper.treeToValue(accountsJson, Users.class);
-            System.out.println(accounts.getUsername());
-            System.out.println(accounts.getPassword());
             Roles rolesRequest = objectMapper.treeToValue(accountsJson, Roles.class);
             Roles roles = rolesDAO.findById(rolesRequest.getRolesId());
             if(usersDAO.exsistEmails(users.getUsersEmail())){
                 return ResponseEntity.badRequest().body(new Notification("Email đã tồn tại"));
             }
-            users.setRoles(roles);
-            usersDAO.create(users);
-            accounts.setUsers(users);
             // Kiểm tra xem user có tồn tại hay chưa
             if(accountsDAO.existsUsername(accounts.getUsername())){
                 return ResponseEntity.badRequest().body(new Notification("Username đã tồn tại"));
             }
+
+            users.setRoles(roles);
+            usersDAO.create(users);
+            accounts.setUsers(users);
+
 
             // Mã hóa mật khẩu
             String encodePassword = passwordEncoder.encode(accounts.getPassword());

@@ -19,30 +19,13 @@ public class Categories {
     @Column(name="description")
     private String description;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name="products_categories",
-            joinColumns = @JoinColumn(name="categories_id"),
-            inverseJoinColumns=@JoinColumn(name="products_id")
-    )
-    private List<Products> products;
+    public Categories() {
+    }
 
-    public Categories(int categoriesId, String categoriesName, String description, List<Products> products) {
+    public Categories(int categoriesId, String categoriesName, String description) {
         this.categoriesId = categoriesId;
         this.categoriesName = categoriesName;
         this.description = description;
-        this.products = products;
-    }
-
-    public List<Products> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Products> products) {
-        this.products = products;
-    }
-
-    public Categories() {
     }
 
     public int getCategoriesId() {

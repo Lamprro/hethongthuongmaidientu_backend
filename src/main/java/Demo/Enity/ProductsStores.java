@@ -42,6 +42,8 @@ public class ProductsStores {
     @JoinColumn(name="stores_id")
     private Stores stores;
 
+    public ProductsStores() {
+    }
 
     public ProductsStores(int productsStoresId, Double originalPrice, Double price, int quantity, double averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
         this.productsStoresId = productsStoresId;

@@ -54,7 +54,7 @@ public class AccountsDAOImplement implements AccountsDAO{
         List<Accounts> result = entityManager.createQuery("SELECT c FROM Accounts c WHERE c.username= :userName",Accounts.class)
                 .setParameter("userName",username)
                 .getResultList();
-        return (result.isEmpty()||result==null)?true:false;
+        return !result.isEmpty();
     }
 
     @Override

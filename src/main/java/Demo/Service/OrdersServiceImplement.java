@@ -9,9 +9,13 @@ import jakarta.persistence.criteria.Order;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OrdersServiceImplement implements OrdersService {
@@ -65,14 +69,18 @@ public class OrdersServiceImplement implements OrdersService {
     }
 
     @Override
-    public ResponseEntity<?> findById(int id) {
+    public Page<Orders> findById(int id) {
         try{
             Orders orders = ordersDAO.findById(id)
                     .orElseThrow(() -> new RuntimeException("Order không tồn tại"));
-            return ResponseEntity.ok(orders);
+            return new PageImpl<>(
+                    List.of(orders),
+                    PageRequest.of(0, 1),
+                    1
+            );
         }catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(500).body(new Notification("Lỗi hệ thống"));
+            return Page.empty();
         }
     }
 
