@@ -76,7 +76,7 @@ public class ProductsDAOImplement implements ProductsDAO {
 
     @Override
     public Optional<Products> findById(int id) {
-        List<Products> result = entityManager.createQuery("SELECT a FROM Orders a WHERE a.ordersId=:ordersId",Products.class)
+        List<Products> result = entityManager.createQuery("SELECT a FROM Products a WHERE a.productsId=:ordersId",Products.class)
                 .setParameter("ordersId",id)
                 .getResultList();
         return result.isEmpty()? Optional.empty():Optional.of(result.get(0));

@@ -73,7 +73,7 @@ public class UsersDAOImplement implements UsersDAO {
         List<Users> result = entityManager.createQuery("SELECT a FROM Users a WHERE a.usersEmail = :usersEmail",Users.class)
                 .setParameter("usersEmail",email)
                 .getResultList();
-        return (result.isEmpty()||result.get(0)==null)?false:true;
+        return result.isEmpty()?true:false;
     }
 
     @Override

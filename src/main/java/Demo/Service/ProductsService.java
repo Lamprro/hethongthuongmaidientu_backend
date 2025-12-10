@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ProductsService {
-    public ResponseEntity<?> create(Products products);
+    public ResponseEntity<?> create(Products products,List<Integer> categoriesId);
     public ResponseEntity<?> update(Products products);
     public Page<Products> searching(String productsName, List<String> categoriesName, Pageable pageable);
 }

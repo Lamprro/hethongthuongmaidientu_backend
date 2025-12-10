@@ -57,7 +57,7 @@ public class OrdersDetailsDAOImplement implements OrdersDetailsDAO{
                 .setParameter("productsId",id)
                 .getSingleResult();
 
-        List<OrdersDetails> result = entityManager.createQuery("SELECT COUNT(a) FROM OrdersDetails a WHERE a.productsStores.products.productsId = :productsId",OrdersDetails.class)
+        List<OrdersDetails> result = entityManager.createQuery("SELECT a FROM OrdersDetails a WHERE a.productsStores.products.productsId = :productsId",OrdersDetails.class)
                 .setParameter("productsId",id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())

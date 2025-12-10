@@ -2,6 +2,7 @@ package Demo.DAO;
 
 import Demo.Enity.Stores;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,8 +33,19 @@ public class StoresDAOImplement implements StoresDAO {
 
     @Override
     public Optional<Stores> findById(int id) {
-        return Optional.ofNullable(entityManager.find(Stores.class, id));
+        String jpql = "SELECT s FROM Stores s WHERE s.storesId = :id";
+
+        try {
+            Stores store = entityManager.createQuery(jpql, Stores.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+            return Optional.of(store);
+
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
+
 
     @Override
     public Page<Stores> findByStoresAddress(String address, Pageable pageable) {

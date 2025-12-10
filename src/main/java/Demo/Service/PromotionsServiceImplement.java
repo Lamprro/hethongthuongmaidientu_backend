@@ -4,6 +4,7 @@ import Demo.DAO.PromotionsDAO;
 import Demo.DAO.StoresDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.Promotions;
+import Demo.Enity.Stores;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,9 @@ public class PromotionsServiceImplement implements PromotionsService{
     @Transactional
     public ResponseEntity<?> create(Promotions promotions) {
         try{
+            Stores stores = storesDAO.findById(promotions.getStores().getStoresId())
+                    .orElseThrow(() -> new RuntimeException("Store không tồn tại"));
+            promotions.setStores(stores);
             promotionsDAO.create(promotions);
             return ResponseEntity.ok("Lưu Promotion store thành công");
         }catch (Exception e){
@@ -35,8 +39,6 @@ public class PromotionsServiceImplement implements PromotionsService{
     @Transactional
     public ResponseEntity<?> update(Promotions promotions) {
         try{
-            storesDAO.findById(promotions.getStores().getStoreId())
-                    .orElseThrow(() -> new RuntimeException("Store không tồn tại"));
             promotionsDAO.update(promotions);
             return ResponseEntity.ok("Cập nhật Promotion thành công");
         }catch (Exception e){

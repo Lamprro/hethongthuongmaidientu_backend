@@ -1,6 +1,8 @@
 package Demo.Service;
 
+import Demo.DAO.CategoriesDAO;
 import Demo.DAO.ProductsDAO;
+import Demo.Enity.Categories;
 import Demo.Enity.Notification;
 import Demo.Enity.Products;
 import jakarta.transaction.Transactional;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,10 +20,20 @@ public class ProductsServiceImplement implements ProductsService {
     @Autowired
     private ProductsDAO productsDAO;
 
+    @Autowired
+    private CategoriesDAO categoriesDAO;
+
     @Override
     @Transactional
-    public ResponseEntity<?> create(Products products) {
+    public ResponseEntity<?> create(Products products,List<Integer> categoriesId) {
         try{
+            List<Categories> categories = new ArrayList<>();
+            for(int a : categoriesId){
+                Categories categories1 = categoriesDAO.findById(a)
+                        .orElseThrow(() -> new RuntimeException("Categories không tồn tại"));
+                categories.add(categories1);
+            }
+            products.setCategories(categories);
             productsDAO.create(products);
             return ResponseEntity.ok("Lưu Product thành công");
         }catch (Exception e){

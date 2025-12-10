@@ -27,9 +27,21 @@ public class Stores {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToOne(cascade =  {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne()
     @JoinColumn(name="users_id")
     private Users users;
+
+    public Stores() {
+    }
+
+    public Stores(String storesName, String storesAddress, String email, int status, LocalDateTime createdAt, Users users) {
+        this.storesName = storesName;
+        this.storesAddress = storesAddress;
+        this.email = email;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.users = users;
+    }
 
     public Stores(int storesId, String storesName, String storesAddress, String email, int status, LocalDateTime createdAt, Users users) {
         this.storesId = storesId;
@@ -41,23 +53,20 @@ public class Stores {
         this.users = users;
     }
 
-    public Stores() {
-    }
-
-    public int getStoreId() {
-        return storesId;
-    }
-
-    public void setStoreId(int storeId) {
-        this.storesId = storeId;
-    }
-
     public String getStoresName() {
         return storesName;
     }
 
     public void setStoresName(String storesName) {
         this.storesName = storesName;
+    }
+
+    public int getStoresId() {
+        return storesId;
+    }
+
+    public void setStoresId(int storesId) {
+        this.storesId = storesId;
     }
 
     public String getStoresAddress() {

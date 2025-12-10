@@ -13,17 +13,21 @@ public class ProductsImages {
     @Column(name="image_url")
     private String imageUrl;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Column(name="public_id", nullable = false)
+    private String publicId;
+
+    @ManyToOne()
     @JoinColumn(name="products_id")
     private Products products;
 
-    public ProductsImages(int imageId, String imageUrl, Products products) {
-        this.imageId = imageId;
-        this.imageUrl = imageUrl;
-        this.products = products;
+    public ProductsImages() {
     }
 
-    public ProductsImages() {
+    public ProductsImages(int imageId, String publicId, String imageUrl, Products products) {
+        this.imageId = imageId;
+        this.publicId = publicId;
+        this.imageUrl = imageUrl;
+        this.products = products;
     }
 
     public int getImageId() {
@@ -40,6 +44,14 @@ public class ProductsImages {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public Products getProducts() {

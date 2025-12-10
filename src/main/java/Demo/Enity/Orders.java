@@ -28,11 +28,11 @@ public class Orders {
     @Column(name="shipping_address")
     private String shippingAddress;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="users_id")
     private Users users;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="stores_id")
     private Stores stores;
 

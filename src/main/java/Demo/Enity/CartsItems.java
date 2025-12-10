@@ -13,11 +13,11 @@ public class CartsItems {
     @Column(name="quantity")
     private int quantity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="carts_id")
     private Carts carts;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="products_stores_id")
     private ProductsStores productsStores;
 

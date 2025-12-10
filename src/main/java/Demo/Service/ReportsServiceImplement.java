@@ -1,9 +1,12 @@
 package Demo.Service;
 
 import Demo.DAO.ReportsDAO;
+import Demo.DAO.StoresDAO;
 import Demo.DAO.UsersDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.Reports;
+import Demo.Enity.Stores;
+import Demo.Enity.Users;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +25,9 @@ public class ReportsServiceImplement implements ReportsService {
     @Transactional
     public ResponseEntity<?> create(Reports reports) {
         try{
+            Users users = usersDAO.findById(reports.getUsers().getUsersId())
+                    .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+            reports.setUsers(users);
             reportsDAO.create(reports);
             return ResponseEntity.ok("Báo cáo report thành công");
         }catch (Exception e){

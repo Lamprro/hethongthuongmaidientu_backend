@@ -3,10 +3,9 @@ package Demo.Service;
 import Demo.DAO.ProductsDAO;
 import Demo.DAO.ProductsStoresDAO;
 import Demo.DAO.StoresDAO;
-import Demo.Enity.Categories;
-import Demo.Enity.Notification;
-import Demo.Enity.ProductsStores;
+import Demo.Enity.*;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +26,14 @@ public class ProductsStoresServiceImplement implements ProductsStoresService {
     @Transactional
     public ResponseEntity<?> create(ProductsStores productsStores) {
         try{
+            Stores stores = storesDAO.findById(productsStores.getStores().getStoresId())
+                .orElseThrow(() -> new RuntimeException("Store không tồn tại"));
+            Products products = productsDAO.findById(productsStores.getProducts().getProductsId())
+                .orElseThrow(() -> new RuntimeException("Products không tồn tại"));
+
+
+            productsStores.setProducts(products);
+            productsStores.setStores(stores);
             productsStoresDAO.create(productsStores);
             return ResponseEntity.ok("Lưu Product store thành công");
         }catch (Exception e){

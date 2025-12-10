@@ -16,7 +16,7 @@ public class Accounts {
     @Column(name="password")
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name="users_id")
     private Users users;
 

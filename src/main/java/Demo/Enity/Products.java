@@ -19,7 +19,7 @@ public class Products {
     @Column(name="description")
     private String description;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany()
     @JoinTable(
             name="products_categories",
             joinColumns = @JoinColumn(name="products_id"),

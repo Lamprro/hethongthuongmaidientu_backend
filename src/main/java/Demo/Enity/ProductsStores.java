@@ -34,11 +34,11 @@ public class ProductsStores {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="products_id")
     private Products products;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="stores_id")
     private Stores stores;
 
@@ -135,6 +135,18 @@ public class ProductsStores {
     }
 
     public void setStores(Stores stores) {
+        this.stores = stores;
+    }
+
+    public ProductsStores(Double originalPrice, int quantity, Double price, double averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
+        this.originalPrice = originalPrice;
+        this.quantity = quantity;
+        this.price = price;
+        this.averageRating = averageRating;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.products = products;
         this.stores = stores;
     }
 }

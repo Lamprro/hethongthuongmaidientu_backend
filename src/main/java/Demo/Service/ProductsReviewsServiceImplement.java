@@ -3,10 +3,7 @@ package Demo.Service;
 import Demo.DAO.ProductsReviewsDAO;
 import Demo.DAO.ProductsStoresDAO;
 import Demo.DAO.UsersDAO;
-import Demo.Enity.Notification;
-import Demo.Enity.ProductsImages;
-import Demo.Enity.ProductsReviews;
-import Demo.Enity.ProductsStores;
+import Demo.Enity.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,10 +25,12 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
     @Transactional
     public ResponseEntity<?> create(ProductsReviews productsReviews) {
         try{
-            productsStoresDAO.findById(productsReviews.getProductsStores().getProductsStoresId())
+            ProductsStores productsStores=productsStoresDAO.findById(productsReviews.getProductsStores().getProductsStoresId())
                     .orElseThrow(() -> new RuntimeException("Product store không tồn tại"));
-            usersDAO.findById(productsReviews.getUsers().getUsersId())
+            Users users = usersDAO.findById(productsReviews.getUsers().getUsersId())
                     .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+            productsReviews.setProductsStores(productsStores);
+            productsReviews.setUsers(users);
             productsReviewsDAO.create(productsReviews);
             productsReviewsDAO.updateAverageRating(productsReviews.getProductsStores().getProductsStoresId());
             return ResponseEntity.ok("Tạo Product Review thành công");
@@ -80,7 +79,7 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
             return productsReviewsDAO.findByProductsStoresId(productsStoresId, pageable);
         } catch (Exception e) {
             e.printStackTrace();
-            return Page.empty(pageable);
+            return Page.empty();
         }
     }
 

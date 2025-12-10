@@ -57,13 +57,31 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
 
     @Override
     public Page<ProductsStores> findByStoresId(int id, Pageable pageable) {
-        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsStores a WHERE a.stores.storesId = :id",Long.class)
-                .setParameter("id", id)
-                .getSingleResult();
 
-        List<ProductsStores> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsStores a WHERE a.stores.storesId = :id ",
-                        ProductsStores.class)
+        // Đếm tổng
+        Long total = entityManager.createQuery(
+                "SELECT COUNT(a) FROM ProductsStores a WHERE a.stores.storesId = :id",
+                Long.class
+        ).setParameter("id", id).getSingleResult();
+
+        List<ProductsStores> result;
+
+        // Nếu không phân trang → trả full list
+        if (pageable.isUnpaged()) {
+            result = entityManager.createQuery(
+                            "SELECT a FROM ProductsStores a WHERE a.stores.storesId = :id",
+                            ProductsStores.class
+                    ).setParameter("id", id)
+                    .getResultList();
+
+            return new PageImpl<>(result); // không cần pageable và total
+        }
+
+        // Ngược lại, phân trang bình thường
+        result = entityManager.createQuery(
+                        "SELECT a FROM ProductsStores a WHERE a.stores.storesId = :id",
+                        ProductsStores.class
+                )
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -71,6 +89,7 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
 
         return new PageImpl<>(result, pageable, total);
     }
+
 
     @Override
     public Page<ProductsStores> findAll(Pageable pageable) {

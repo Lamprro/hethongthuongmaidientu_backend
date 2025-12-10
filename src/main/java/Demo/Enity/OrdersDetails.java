@@ -16,11 +16,11 @@ public class OrdersDetails {
     @Column(name="subs_total")
     private Double subsTotal;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="orders_id")
     private Orders orders;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="products_stores_id")
     private ProductsStores productsStores;
 

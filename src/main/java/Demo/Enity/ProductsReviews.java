@@ -23,11 +23,11 @@ public class ProductsReviews {
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="products_stores_id")
     private ProductsStores productsStores;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="users_id")
     private Users users;
 

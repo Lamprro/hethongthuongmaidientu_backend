@@ -4,6 +4,7 @@ import Demo.DAO.StoresDAO;
 import Demo.DAO.UsersDAO;
 import Demo.Enity.Notification;
 import Demo.Enity.Stores;
+import Demo.Enity.Users;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,9 @@ public class StoresServiceImplement implements StoresService {
     @Transactional
     public ResponseEntity<?> create(Stores stores) {
         try{
+            Users users = usersDAO.findById(stores.getUsers().getUsersId())
+                    .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+            stores.setUsers(users);
             storesDAO.create(stores);
             return ResponseEntity.ok("Lưu Store thành công");
         }catch (Exception e){
@@ -33,8 +37,6 @@ public class StoresServiceImplement implements StoresService {
     @Transactional
     public ResponseEntity<?> update(Stores stores) {
         try{
-            usersDAO.findById(stores.getUsers().getUsersId())
-                    .orElseThrow(() -> new RuntimeException("User không tồn tại"));
             storesDAO.update(stores);
             return ResponseEntity.ok("Cập nhật Store thành công");
         }catch (Exception e){

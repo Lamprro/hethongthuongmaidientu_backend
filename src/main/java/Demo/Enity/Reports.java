@@ -21,9 +21,12 @@ public class Reports {
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="users_id")
     private Users users;
+
+    public Reports() {
+    }
 
     public Reports(String comment, int reportsId, String reply, LocalDateTime createdAt, Users users) {
         this.comment = comment;

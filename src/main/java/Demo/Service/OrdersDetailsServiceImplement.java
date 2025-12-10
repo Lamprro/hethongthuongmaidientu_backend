@@ -35,10 +35,16 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
         try{
             Users users = usersDAO.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+            List<OrdersDetails> ordersDetailsList= new ArrayList<>();
+            for(OrdersDetails o : ordersDetails){
+                ProductsStores productsStores = productsStoresDAO.findById(o.getProductsStores().getProductsStoresId())
+                        .orElseThrow(() -> new RuntimeException("ProductsStores không tồn tại"));
+                o.setProductsStores(productsStores);
+            }
             Map<Integer,List<OrdersDetails>> groupByStore =
                     ordersDetails.stream()
                             .collect(Collectors.groupingBy(
-                                    p -> p.getProductsStores().getStores().getStoreId()
+                                    p -> p.getProductsStores().getStores().getStoresId()
                             ));
             List<Orders> result = new ArrayList<>();
             for(Integer storedId:groupByStore.keySet()){
@@ -90,6 +96,7 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> delete(int ordersId) {
         try{
             ordersDetailsDAO.deleteByOrdersId(ordersId);

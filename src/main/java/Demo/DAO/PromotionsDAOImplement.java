@@ -81,7 +81,7 @@ public class PromotionsDAOImplement implements PromotionsDAO {
                 .getResultList();
 
         for(ProductsStores i : productsStoresList){
-            i.setPrice(i.getPrice()*(100-discount)/100);
+            i.setPrice(i.getOriginalPrice()*(100-discount)/100);
             entityManager.merge(i);
         }
     }

@@ -15,7 +15,7 @@ public class Carts {
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name="users_id")
     private Users users;
 

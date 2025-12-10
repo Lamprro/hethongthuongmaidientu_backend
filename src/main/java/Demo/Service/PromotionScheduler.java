@@ -4,6 +4,7 @@ import Demo.DAO.ProductsStoresDAO;
 import Demo.DAO.PromotionsDAO;
 import Demo.Enity.ProductsStores;
 import Demo.Enity.Promotions;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,13 +22,14 @@ public class PromotionScheduler {
     private ProductsStoresDAO productsStoresDAO;
 
     @Scheduled(fixedRate = 60000) // chạy mỗi 60 giây
+    @Transactional
     public void checkExpiredPromotions() {
 
         List<Promotions> promotions = promotionsDAO.findExpiredPromotions();
 
         for (Promotions promo : promotions) {
 
-            List<ProductsStores> list = productsStoresDAO.findByStoresId(promo.getStores().getStoreId(), Pageable.unpaged()).getContent();
+            List<ProductsStores> list = productsStoresDAO.findByStoresId(promo.getStores().getStoresId(), Pageable.unpaged()).getContent();
 
             for (ProductsStores ps : list) {
                 ps.setPrice(ps.getOriginalPrice()); // trả về giá gốc

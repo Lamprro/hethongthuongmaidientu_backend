@@ -1,7 +1,9 @@
 package Demo.Service;
 
+import Demo.DAO.RolesDAO;
 import Demo.DAO.UsersDAO;
 import Demo.Enity.Notification;
+import Demo.Enity.Roles;
 import Demo.Enity.Users;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +19,8 @@ public class UsersServiceImplement implements UsersService{
     private UsersDAO usersDAO;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private RolesDAO rolesDAO;
 
     @Override
     @Transactional
