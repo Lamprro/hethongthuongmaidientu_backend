@@ -49,4 +49,16 @@ public class CartsServiceImplement implements CartsService{
         return ResponseEntity.status(500).body("Lỗi hệ thống");
     }
     }
+
+    @Override
+    public ResponseEntity<?> findByUsersId(int usersId) {
+        try{
+            Users users = usersDAO.findById(usersId)
+                    .orElseThrow(()-> new RuntimeException("Users không tồn tại"));
+            return ResponseEntity.ok(cartsDAO.findByUsersId(users.getUsersId()));
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Lỗi hệ thống");
+        }
+    }
 }

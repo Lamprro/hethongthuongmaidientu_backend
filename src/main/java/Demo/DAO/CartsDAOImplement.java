@@ -46,4 +46,17 @@ public class CartsDAOImplement implements CartsDAO{
                 .getResultList();
         return new PageImpl<>(result,pageable,total);
     }
+
+    @Override
+    public Optional<Carts> findByUsersId(int id) {
+        try{
+            List<Carts> result = entityManager.createQuery("SELECT a FROM Carts a WHERE a.users.usersId=:usersId",Carts.class)
+                    .setParameter("usersId",id)
+                    .getResultList();
+            return result.isEmpty()? Optional.empty(): Optional.of(result.get(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
 }

@@ -62,4 +62,9 @@ public class ProductsStoresController {
             return Page.empty();
         }
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductsStores> findById(@PathVariable int id) {
+        return ResponseEntity.ok(productsStoresService.findById(id));
+    }
+
 }

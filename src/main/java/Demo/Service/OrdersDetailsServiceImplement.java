@@ -3,6 +3,7 @@ package Demo.Service;
 import Demo.DAO.*;
 import Demo.Enity.*;
 
+import Demo.ErroDTO.MessageProductsStoresQuantity;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,8 +65,9 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
                     total+=o.getSubsTotal();
                     ProductsStores productsStores = productsStoresDAO.findById(o.getProductsStores().getProductsStoresId())
                             .orElseThrow(() -> new RuntimeException("Product store không tồn tại"));
-                    if((productsStores.getQuantity()-o.getQuantity())<=0){
-                        return ResponseEntity.ok("Đã hết hàng của Product store này");
+                    if((productsStores.getQuantity()-o.getQuantity())<0){
+                        MessageProductsStoresQuantity error = new MessageProductsStoresQuantity("Đã hết hàng của Product store "+productsStores.getProducts().getProductsName() + "!", orders.getOrdersId(),productsStores.getProductsStoresId());
+                        return ResponseEntity.badRequest().body(error);
                     }
                     else{
                         productsStores.setQuantity(productsStores.getQuantity()-o.getQuantity());

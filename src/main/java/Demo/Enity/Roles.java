@@ -13,8 +13,7 @@ public class Roles {
     @Column(name="role_name")
     private String roleName;
 
-    public Roles(int rolesId, String roleName) {
-        this.rolesId = rolesId;
+    public Roles( String roleName) {
         this.roleName = roleName;
     }
 

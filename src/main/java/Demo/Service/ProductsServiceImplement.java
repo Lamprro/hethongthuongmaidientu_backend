@@ -71,5 +71,17 @@ public class ProductsServiceImplement implements ProductsService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> findById(int id) {
+        try {
+             Products a = productsDAO.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Product không tồn tại"));
+             return ResponseEntity.ok(a);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(new Notification("Lỗi hệ thống"));
+        }
+    }
+
 
 }

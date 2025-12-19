@@ -28,9 +28,10 @@ public class JwtService {
         Map<String,Object> claims = new HashMap<>();
         Accounts accounts = accountSecurityService.findByUsername(username);
         claims.put("accountsId",accounts.getAccountsId());
-        claims.put("accounts.users.usersName",accounts.getUsers().getUsersName());
-        claims.put("accounts.users.status",accounts.getUsers().getStatus());
-        claims.put("accounts.users.roles.rolesName",accounts.getUsers().getRoles().getRoleName());
+        claims.put("usersId",accounts.getUsers().getUsersId());
+        claims.put("usersUsersName",accounts.getUsers().getUsersName());
+        claims.put("usersStatus",accounts.getUsers().getStatus());
+        claims.put("usersRolesName",accounts.getUsers().getRoles().getRoleName());
         return createToken(claims,username);
     }
     // Tạo JWT với những claims đã chọn

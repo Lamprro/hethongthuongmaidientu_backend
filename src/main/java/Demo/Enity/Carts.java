@@ -32,8 +32,8 @@ public class Carts {
         return cartsId;
     }
 
-    public void setCarts_id(int carts_id) {
-        this.cartsId = carts_id;
+    public void setCartsId(int cartsId) {
+        this.cartsId = cartsId;
     }
 
     public LocalDateTime getCreatedAt() {

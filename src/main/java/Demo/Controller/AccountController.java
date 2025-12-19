@@ -29,7 +29,7 @@ public class AccountController {
     @Autowired
     private JwtService jwtService;
 
-    @PostMapping(path="/create_user_account")
+    @PostMapping("/create_users_accounts")
     public ResponseEntity<?> save (@RequestBody JsonNode jsonNode){
         try{
             return accountsService.create(jsonNode);
@@ -38,7 +38,7 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @GetMapping(path="/get_information/{accountsId}")
+    @GetMapping("/get_information/{accountsId}")
     public ResponseEntity<?> findByAccountsId(@PathVariable int accountsId){
         try{
             return accountsService.findById(accountsId);
@@ -47,12 +47,12 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PostMapping(path="/change_password")
+    @PostMapping("/change_password")
     public ResponseEntity<?> changeUsernamePassword(@RequestBody JsonNode jsonNode){
         return accountsService.changeUsernamePassword(jsonNode);
     }
 
-    @PostMapping(path="/authenticate")
+    @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate (@RequestBody LoginRequest loginRequest){
         try{
             Authentication authentication = manager.authenticate(

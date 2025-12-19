@@ -3,6 +3,7 @@ package Demo.DAO;
 import Demo.Enity.CartsItems;
 import Demo.Enity.Orders;
 import Demo.Enity.Products;
+import Demo.Enity.ProductsStores;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,36 +37,51 @@ public class ProductsDAOImplement implements ProductsDAO {
             List<String> categoriesName,
             Pageable pageable) {
 
-        StringBuilder jpql = new StringBuilder("SELECT DISTINCT p FROM Products p LEFT JOIN p.categories c WHERE 1=1 ");
-        StringBuilder jpqlCount = new StringBuilder("SELECT COUNT(DISTINCT p) FROM Products p LEFT JOIN p.categories c WHERE 1=1 ");
+        StringBuilder jpql = new StringBuilder(
+                "SELECT p FROM Products p JOIN p.categories c WHERE 1=1 "
+        );
 
+        StringBuilder jpqlCount = new StringBuilder(
+                "SELECT p FROM Products p JOIN p.categories c WHERE 1=1 "
+        );
+
+        // Lọc theo tên sản phẩm
         if (productsName != null && !productsName.trim().isEmpty()) {
             jpql.append(" AND p.productsName LIKE :name ");
             jpqlCount.append(" AND p.productsName LIKE :name ");
         }
 
+        // Lọc product phải chứa TẤT CẢ category trong list
         if (categoriesName != null && !categoriesName.isEmpty()) {
             jpql.append(" AND c.categoriesName IN :categories ");
             jpqlCount.append(" AND c.categoriesName IN :categories ");
+
+            jpql.append(" GROUP BY p HAVING COUNT(DISTINCT c.categoriesName) = :size ");
+            jpqlCount.append(" GROUP BY p HAVING COUNT(DISTINCT c.categoriesName) = :size ");
         }
 
-        // Query count
-        var queryCount = entityManager.createQuery(jpqlCount.toString(), Long.class);
-        // Query data
+        // Tạo query
         var queryData = entityManager.createQuery(jpql.toString(), Products.class);
+        var queryCount = entityManager.createQuery(jpqlCount.toString(), Products.class);
 
         // Set parameters
         if (productsName != null && !productsName.trim().isEmpty()) {
-            queryCount.setParameter("name", "%" + productsName + "%");
             queryData.setParameter("name", "%" + productsName + "%");
+            queryCount.setParameter("name", "%" + productsName + "%");
         }
+
         if (categoriesName != null && !categoriesName.isEmpty()) {
-            queryCount.setParameter("categories", categoriesName);
             queryData.setParameter("categories", categoriesName);
+            queryCount.setParameter("categories", categoriesName);
+
+            queryData.setParameter("size", categoriesName.size());
+            queryCount.setParameter("size", categoriesName.size());
         }
 
-        Long total = queryCount.getSingleResult();
+        // Lấy total (vì GROUP BY → không dùng getSingleResult)
+        Long total = (long) queryCount.getResultList().size();
 
+        // Lấy dữ liệu phân trang
         List<Products> result = queryData
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -81,5 +97,7 @@ public class ProductsDAOImplement implements ProductsDAO {
                 .getResultList();
         return result.isEmpty()? Optional.empty():Optional.of(result.get(0));
     }
+
+
 
 }

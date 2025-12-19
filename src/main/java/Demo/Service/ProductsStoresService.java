@@ -13,4 +13,5 @@ public interface ProductsStoresService {
     public ResponseEntity<?> update(ProductsStores productsStores);
     public Page<ProductsStores> findByProductsId(int productsId,Pageable pageable);
     public Page<ProductsStores> findByProductsIdAndStoresId(int productsId, int storesId, Pageable pageable);
+    public ProductsStores findById(int productsStoresId);
 }

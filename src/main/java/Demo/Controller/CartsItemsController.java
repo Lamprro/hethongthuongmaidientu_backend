@@ -53,7 +53,7 @@ public class CartsItemsController {
             return ResponseEntity.status(500).body("Lỗi hệ thống");
         }
     }
-    @PostMapping ("/get/{cartsId}")
+    @GetMapping ("/carts_id/{cartsId}")
     public Page<CartsItems> findByCartsId(@PathVariable int cartsId, Pageable pageable){
         try {
             return cartsItemsService.findByCartsId(cartsId,pageable);

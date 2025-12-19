@@ -11,4 +11,5 @@ public interface CartsDAO {
     public void update(Carts carts);
     public Optional<Carts> findById(int id);
     public Page<Carts> findAll(Pageable pageable);
+    public Optional<Carts> findByUsersId(int id);
 }

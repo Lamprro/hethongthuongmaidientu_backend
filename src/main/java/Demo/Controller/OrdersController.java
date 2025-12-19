@@ -24,7 +24,7 @@ public class OrdersController {
     @Autowired
     private OrdersDetailsService ordersDetailsService;
 
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public Page<Orders> findById(@PathVariable int id){
         try{
             return ordersService.findById(id);

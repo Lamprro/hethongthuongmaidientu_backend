@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 
 @Service
 public class AccountsServiceImplement implements AccountsService{
@@ -58,10 +60,11 @@ public class AccountsServiceImplement implements AccountsService{
             if(accountsDAO.existsUsername(accounts.getUsername())){
                 return ResponseEntity.badRequest().body(new Notification("Username đã tồn tại"));
             }
-
+            LocalDateTime createdAt = LocalDateTime.now();
             users.setRoles(roles);
             usersDAO.create(users);
             accounts.setUsers(users);
+            users.setCreatedAt(createdAt);
 
 
             // Mã hóa mật khẩu
@@ -70,7 +73,10 @@ public class AccountsServiceImplement implements AccountsService{
 
             // Lưu vào database
             accountsDAO.save(accounts);
-            if(roles.getRolesId()==1){
+
+
+
+            if(roles.getRolesId()==3){
                 cartsService.create(users.getUsersId());
             }
 

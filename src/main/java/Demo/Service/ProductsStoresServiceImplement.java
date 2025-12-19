@@ -4,6 +4,7 @@ import Demo.DAO.ProductsDAO;
 import Demo.DAO.ProductsStoresDAO;
 import Demo.DAO.StoresDAO;
 import Demo.Enity.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,11 @@ public class ProductsStoresServiceImplement implements ProductsStoresService {
             e.printStackTrace();
             return Page.empty(pageable);
         }
+    }
+
+    @Override
+    public ProductsStores findById(int productsStoresId) {
+        return productsStoresDAO.findById(productsStoresId)
+                .orElseThrow(() -> new EntityNotFoundException("Product store không tồn tại"));
     }
 }
