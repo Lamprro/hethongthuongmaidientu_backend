@@ -51,6 +51,16 @@ public class OrdersController {
             return Page.empty();
         }
     }
+    @PutMapping("/update/{ordersId}")
+    public ResponseEntity<?> update (@PathVariable int ordersId,@RequestParam int status) {
+        try{
+            ordersService.update(ordersId, status);
+            return ResponseEntity.ok("Cập nhật trạng thái thành công");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Lỗi hệ thống");
+        }
+    }
 
 
 }

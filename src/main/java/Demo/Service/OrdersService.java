@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface OrdersService {
     public ResponseEntity<?> create(Orders orders);
-    public ResponseEntity<?> update(Orders orders);
+    public ResponseEntity<?> update(int ordersId,int status);
     public ResponseEntity<?> delete(int ordersId);
     public Page<Orders> findById(int id);
     public Page<Orders> findByUsersId(int id, Pageable pageable);

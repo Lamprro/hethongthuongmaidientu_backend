@@ -38,11 +38,11 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @GetMapping("/get_information/{accountsId}")
+    @PostMapping("/get_information/{accountsId}")
     public ResponseEntity<?> findByAccountsId(@PathVariable int accountsId){
         try{
             return accountsService.findById(accountsId);
-        }catch(Exception e ){
+        }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }

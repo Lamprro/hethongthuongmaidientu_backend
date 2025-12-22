@@ -73,4 +73,14 @@ public class ProductsReviewsController {
         }
     }
 
+    @GetMapping("/users/{usersId}/products_stores/{productsStoresId}")
+    public Page<?> findByProductsIdAndUsersId(@PathVariable("productsStoresId") int productsStoresId,@PathVariable("usersId") int usersId ,Pageable pageable){
+        try {
+            return productsReviewsService.findByProductsStoresIdAndUsersId(productsStoresId,usersId,pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Page.empty();
+        }
+    }
+
 }

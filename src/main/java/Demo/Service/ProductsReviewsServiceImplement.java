@@ -84,6 +84,16 @@ public class ProductsReviewsServiceImplement implements ProductsReviewsService {
     }
 
     @Override
+    public Page<ProductsReviews> findByProductsStoresIdAndUsersId(int productsId, int usersId, Pageable pageable) {
+        try {
+            return productsReviewsDAO.findByProductsIdAndUsersId(productsId,usersId,pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Page.empty(pageable);
+        }
+    }
+
+    @Override
     public Page<ProductsReviews> findByRatingAndProductsId(double rating, int productsId, Pageable pageable) {
         try {
             productsStoresDAO.findById(productsId)

@@ -27,4 +27,14 @@ public class UsersController {
             return ResponseEntity.status(500).body("Lỗi hệ thống");
         }
     }
+    @PostMapping("/{usersId}")
+    public ResponseEntity<?> findById(@PathVariable int usersId){
+        try {
+            return usersService.findByUsersId(usersId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Lỗi hệ thống");
+        }
+    }
+
 }

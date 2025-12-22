@@ -6,4 +6,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface UsersService {
     public ResponseEntity<?> updateProfile (Users usersRequest);
+    public ResponseEntity<?> findByUsersId (int usersId);
 }

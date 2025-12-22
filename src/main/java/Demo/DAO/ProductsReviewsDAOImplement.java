@@ -120,5 +120,29 @@ public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
         ps.setAverageRating(rounded);   // dùng số đã làm tròn
         entityManager.merge(ps);        // update đúng chuẩn
     }
+
+    @Override
+    public Page<ProductsReviews> findByProductsIdAndUsersId(int productsId, int usersId, Pageable pageable) {
+
+        Long total = entityManager.createQuery(
+                        "SELECT COUNT(a) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :productsId AND a.users.usersId= :usersId",
+                        Long.class
+                )
+                .setParameter("productsId", productsId)
+                .setParameter("usersId", usersId)
+                .getSingleResult();
+
+        List<ProductsReviews> result = entityManager.createQuery(
+                        "SELECT a FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :productsId AND a.users.usersId= :usersId",
+                        ProductsReviews.class
+                )
+                .setParameter("productsId", productsId)
+                .setParameter("usersId", usersId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+
+        return new PageImpl<>(result, pageable, total);
+    }
 }
 

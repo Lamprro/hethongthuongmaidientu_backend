@@ -96,14 +96,16 @@ public class AccountsServiceImplement implements AccountsService{
             Accounts accountRequest = objectMapper.treeToValue(accountJson, Accounts.class);
             Accounts accounts = accountsDAO.findById(accountRequest.getAccountsId())
                     .orElseThrow(()-> new RuntimeException("Account không tồn tại"));
-            accounts.setUsername(accountRequest.getUsername());
+
             // Kiểm tra xem user có tồn tại hay chưa
-            if(accountsDAO.existsUsername(accounts.getUsername())){
+            if(accountsDAO.existsUsername(accountRequest.getUsername())&&!accountRequest.getUsername().equals(accounts.getUsername())){
                 return ResponseEntity.badRequest().body(new Notification("Username đã tồn tại"));
             }
-            accounts.setPassword(accountRequest.getPassword());
+            accounts.setUsername(accountRequest.getUsername());
+            String encodePassword = passwordEncoder.encode(accountRequest.getPassword());
+            accounts.setPassword(encodePassword);
             accountsDAO.update(accounts);
-            return ResponseEntity.ok("Cập nhật thông tin tài khoản thành công");
+            return ResponseEntity.ok("Cập nhật thông tin    tài khoản thành công");
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body("Lỗi hệ thống");

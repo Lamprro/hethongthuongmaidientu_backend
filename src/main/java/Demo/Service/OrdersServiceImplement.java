@@ -42,10 +42,11 @@ public class OrdersServiceImplement implements OrdersService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> update(Orders orders) {
+    public ResponseEntity<?> update(int ordersId, int status) {
         try{
-            ordersDAO.findById(orders.getOrdersId())
+            Orders orders = ordersDAO.findById(ordersId)
                     .orElseThrow(() -> new RuntimeException("Order không tồn tại"));
+            orders.setStatus(status);
             ordersDAO.update(orders);
             return ResponseEntity.ok("Cập nhật Order thành công");
         } catch (Exception e) {
