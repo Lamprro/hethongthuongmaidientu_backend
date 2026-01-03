@@ -28,7 +28,6 @@ public class PromotionScheduler {
         List<Promotions> promotions = promotionsDAO.findExpiredPromotions();
 
         for (Promotions promo : promotions) {
-
             List<ProductsStores> list = productsStoresDAO.findByStoresId(promo.getStores().getStoresId(), Pageable.unpaged()).getContent();
 
             for (ProductsStores ps : list) {
@@ -36,7 +35,6 @@ public class PromotionScheduler {
                 productsStoresDAO.update(ps);
             }
 
-            promotionsDAO.update(promo);
         }
     }
 }

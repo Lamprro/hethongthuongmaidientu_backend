@@ -35,60 +35,77 @@ public class ProductsDAOImplement implements ProductsDAO {
     public Page<Products> findByProductsNameAndCategoriesName(
             String productsName,
             List<String> categoriesName,
-            Pageable pageable) {
+            Pageable pageable
+    ) {
 
-        StringBuilder jpql = new StringBuilder(
-                "SELECT p FROM Products p JOIN p.categories c WHERE 1=1 "
-        );
+        // ---------- COUNT ----------
+        String countJpql = """
+        SELECT COUNT(DISTINCT p.productsId)
+        FROM Products p
+        WHERE (:name IS NULL OR p.productsName LIKE :name)
+        AND (
+            :categories IS NULL OR
+            p.productsId IN (
+                SELECT p2.productsId
+                FROM Products p2
+                JOIN p2.categories c2
+                WHERE c2.categoriesName IN :categories
+                GROUP BY p2.productsId
+                HAVING COUNT(DISTINCT c2.categoriesName) = :size
+            )
+        )
+    """;
 
-        StringBuilder jpqlCount = new StringBuilder(
-                "SELECT p FROM Products p JOIN p.categories c WHERE 1=1 "
-        );
+        Long total = entityManager.createQuery(countJpql, Long.class)
+                .setParameter("name",
+                        productsName == null || productsName.isBlank()
+                                ? null
+                                : "%" + productsName + "%")
+                .setParameter("categories",
+                        categoriesName == null || categoriesName.isEmpty()
+                                ? null
+                                : categoriesName)
+                .setParameter("size",
+                        categoriesName == null ? 0 : categoriesName.size())
+                .getSingleResult();
 
-        // Lọc theo tên sản phẩm
-        if (productsName != null && !productsName.trim().isEmpty()) {
-            jpql.append(" AND p.productsName LIKE :name ");
-            jpqlCount.append(" AND p.productsName LIKE :name ");
-        }
 
-        // Lọc product phải chứa TẤT CẢ category trong list
-        if (categoriesName != null && !categoriesName.isEmpty()) {
-            jpql.append(" AND c.categoriesName IN :categories ");
-            jpqlCount.append(" AND c.categoriesName IN :categories ");
+        // ---------- DATA ----------
+        String dataJpql = """
+        SELECT DISTINCT p
+        FROM Products p
+        WHERE (:name IS NULL OR p.productsName LIKE :name)
+        AND (
+            :categories IS NULL OR
+            p.productsId IN (
+                SELECT p2.productsId
+                FROM Products p2
+                JOIN p2.categories c2
+                WHERE c2.categoriesName IN :categories
+                GROUP BY p2.productsId
+                HAVING COUNT(DISTINCT c2.categoriesName) = :size
+            )
+        )
+    """;
 
-            jpql.append(" GROUP BY p HAVING COUNT(DISTINCT c.categoriesName) = :size ");
-            jpqlCount.append(" GROUP BY p HAVING COUNT(DISTINCT c.categoriesName) = :size ");
-        }
-
-        // Tạo query
-        var queryData = entityManager.createQuery(jpql.toString(), Products.class);
-        var queryCount = entityManager.createQuery(jpqlCount.toString(), Products.class);
-
-        // Set parameters
-        if (productsName != null && !productsName.trim().isEmpty()) {
-            queryData.setParameter("name", "%" + productsName + "%");
-            queryCount.setParameter("name", "%" + productsName + "%");
-        }
-
-        if (categoriesName != null && !categoriesName.isEmpty()) {
-            queryData.setParameter("categories", categoriesName);
-            queryCount.setParameter("categories", categoriesName);
-
-            queryData.setParameter("size", categoriesName.size());
-            queryCount.setParameter("size", categoriesName.size());
-        }
-
-        // Lấy total (vì GROUP BY → không dùng getSingleResult)
-        Long total = (long) queryCount.getResultList().size();
-
-        // Lấy dữ liệu phân trang
-        List<Products> result = queryData
+        List<Products> result = entityManager.createQuery(dataJpql, Products.class)
+                .setParameter("name",
+                        productsName == null || productsName.isBlank()
+                                ? null
+                                : "%" + productsName + "%")
+                .setParameter("categories",
+                        categoriesName == null || categoriesName.isEmpty()
+                                ? null
+                                : categoriesName)
+                .setParameter("size",
+                        categoriesName == null ? 0 : categoriesName.size())
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
 
         return new PageImpl<>(result, pageable, total);
     }
+
 
     @Override
     public Optional<Products> findById(int id) {

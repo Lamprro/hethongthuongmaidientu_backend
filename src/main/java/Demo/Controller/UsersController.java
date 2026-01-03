@@ -1,11 +1,15 @@
 package Demo.Controller;
 
+import Demo.DAO.DTO.CustomerReportDTO;
 import Demo.Enity.Stores;
 import Demo.Enity.Users;
 import Demo.Service.UsersService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +38,15 @@ public class UsersController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Lỗi hệ thống");
+        }
+    }
+    @GetMapping("/get_all_customer")
+    public Page<CustomerReportDTO> getAllCustomer(Pageable pageable){
+        try {
+            return usersService.getCustomerReport(pageable);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Page.empty();
         }
     }
 

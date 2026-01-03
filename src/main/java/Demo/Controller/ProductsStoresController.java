@@ -66,5 +66,9 @@ public class ProductsStoresController {
     public ResponseEntity<ProductsStores> findById(@PathVariable int id) {
         return ResponseEntity.ok(productsStoresService.findById(id));
     }
+    @GetMapping("/stores_id/{storesId}")
+    public Page<ProductsStores> findByStoresId(@PathVariable int storesId,Pageable pageable){
+        return productsStoresService.findByStoresid(storesId,pageable);
+    }
 
 }

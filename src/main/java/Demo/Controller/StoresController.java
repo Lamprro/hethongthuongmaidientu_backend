@@ -5,6 +5,7 @@ import Demo.Enity.Stores;
 import Demo.Service.StoresService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,6 +49,24 @@ public class StoresController {
         } catch (Exception e) {
             e.printStackTrace();
             return Page.empty();
+        }
+    }
+    @GetMapping("/users/{usersId}")
+    public ResponseEntity<?> findByUsersId (@PathVariable int usersId){
+        try {
+            return ResponseEntity.ok().body(storesService.findByUsersId(usersId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Lỗi hệ thống");
+        }
+    }
+    @GetMapping("/find_all")
+    public Page<Stores> findAll(Pageable pageable){
+        try{
+            return storesService.findAll(pageable);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Page.empty(pageable);
         }
     }
 

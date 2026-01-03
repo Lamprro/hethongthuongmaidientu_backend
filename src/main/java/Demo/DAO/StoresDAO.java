@@ -17,4 +17,5 @@ public interface StoresDAO {
     public Page<Stores> findByStoresName(String name, Pageable pageable);
 
     Page<Stores> findAll(Pageable pageable);
+    Optional<Stores> findByUsersId(int usersId);
 }

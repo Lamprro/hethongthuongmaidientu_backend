@@ -32,7 +32,7 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
     private StoresDAO storesDAO;
     @Override
     @Transactional
-    public ResponseEntity<?> create(List<OrdersDetails> ordersDetails, int userId) {
+    public ResponseEntity<?> create(List<OrdersDetails> ordersDetails, int userId,String address) {
         try{
             Users users = usersDAO.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User không tồn tại"));
@@ -57,7 +57,7 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
                 orders.setCreatedAt(LocalDateTime.now());
                 orders.setPaymentMethod("MONEY");
                 orders.setStores(stores);
-                orders.setShippingAddress(users.getUsersAddress());
+                orders.setShippingAddress(address);
                 ordersDAO.create(orders);
                 double total =0;
                 for(OrdersDetails o: groupByStore.get(storedId)){

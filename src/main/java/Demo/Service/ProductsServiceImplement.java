@@ -35,7 +35,7 @@ public class ProductsServiceImplement implements ProductsService {
             }
             products.setCategories(categories);
             productsDAO.create(products);
-            return ResponseEntity.ok("Lưu Product thành công");
+            return ResponseEntity.ok(products);
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body(new Notification("Lỗi hệ thống"));
@@ -66,7 +66,6 @@ public class ProductsServiceImplement implements ProductsService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Trả về trang rỗng để không crash API
             return Page.empty(pageable);
         }
     }

@@ -57,8 +57,6 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
 
     @Override
     public Page<ProductsStores> findByStoresId(int id, Pageable pageable) {
-
-        // Đếm tổng
         Long total = entityManager.createQuery(
                 "SELECT COUNT(a) FROM ProductsStores a WHERE a.stores.storesId = :id",
                 Long.class
@@ -97,6 +95,8 @@ public class ProductsStoresDAOImplement implements ProductsStoresDAO {
                 .getSingleResult();
 
         List<ProductsStores> result = entityManager.createQuery("SELECT a FROM ProductsStores a ", ProductsStores.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

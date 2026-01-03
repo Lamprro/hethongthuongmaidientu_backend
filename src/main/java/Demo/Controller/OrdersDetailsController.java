@@ -27,11 +27,12 @@ public class OrdersDetailsController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody JsonNode jsonNode){
         try {
+            String shippingAddress = jsonNode.get("shippingAddress").asText();
             int usersId = jsonNode.get("usersId").asInt();
             JsonNode listNode = jsonNode.get("ordersDetails");
             List<OrdersDetails> ordersDetailsList =
                     objectMapper.readValue(listNode.traverse(), new TypeReference<List<OrdersDetails>>() {});
-            return ordersDetailsService.create(ordersDetailsList,usersId);
+            return ordersDetailsService.create(ordersDetailsList,usersId,shippingAddress);
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body("Lỗi hệ thống");

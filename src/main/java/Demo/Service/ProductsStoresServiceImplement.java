@@ -89,4 +89,9 @@ public class ProductsStoresServiceImplement implements ProductsStoresService {
         return productsStoresDAO.findById(productsStoresId)
                 .orElseThrow(() -> new EntityNotFoundException("Product store không tồn tại"));
     }
+
+    @Override
+    public Page<ProductsStores> findByStoresid(int storesId, Pageable pageable) {
+        return productsStoresDAO.findByStoresId(storesId,pageable);
+    }
 }

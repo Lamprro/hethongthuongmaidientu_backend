@@ -13,8 +13,11 @@ public class ProductsStores {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int productsStoresId;
 
-    @Column(name="originalPrice")
+    @Column(name="original_price")
     private Double originalPrice;
+
+    @Column (name = "import_price")
+    private Double importPrice;
 
     @Column(name="price")
     private Double price;
@@ -42,22 +45,6 @@ public class ProductsStores {
     @JoinColumn(name="stores_id")
     private Stores stores;
 
-    public ProductsStores() {
-    }
-
-    public ProductsStores(int productsStoresId, Double originalPrice, Double price, int quantity, double averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
-        this.productsStoresId = productsStoresId;
-        this.originalPrice = originalPrice;
-        this.price = price;
-        this.quantity = quantity;
-        this.averageRating = averageRating;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.products = products;
-        this.stores = stores;
-    }
-
     public int getProductsStoresId() {
         return productsStoresId;
     }
@@ -72,6 +59,14 @@ public class ProductsStores {
 
     public void setOriginalPrice(Double originalPrice) {
         this.originalPrice = originalPrice;
+    }
+
+    public Double getImportPrice() {
+        return importPrice;
+    }
+
+    public void setImportPrice(Double importPrice) {
+        this.importPrice = importPrice;
     }
 
     public Double getPrice() {
@@ -138,10 +133,15 @@ public class ProductsStores {
         this.stores = stores;
     }
 
-    public ProductsStores(Double originalPrice, int quantity, Double price, double averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
+    public ProductsStores() {
+    }
+
+    public ProductsStores(int productsStoresId, Double originalPrice, Double importPrice, Double price, int quantity, double averageRating, int status, LocalDateTime createdAt, LocalDateTime updatedAt, Products products, Stores stores) {
+        this.productsStoresId = productsStoresId;
         this.originalPrice = originalPrice;
-        this.quantity = quantity;
+        this.importPrice = importPrice;
         this.price = price;
+        this.quantity = quantity;
         this.averageRating = averageRating;
         this.status = status;
         this.createdAt = createdAt;

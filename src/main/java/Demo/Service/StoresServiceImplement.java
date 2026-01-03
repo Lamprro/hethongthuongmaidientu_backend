@@ -49,4 +49,26 @@ public class StoresServiceImplement implements StoresService {
     public Page<Stores> findByStoresName(String name, Pageable pageable) {
         return storesDAO.findByStoresName(name,pageable);
     }
+
+    @Override
+    public ResponseEntity<?> findByUsersId(int usersId) {
+        try{
+            Stores stores = storesDAO.findByUsersId(usersId)
+                    .orElseThrow(() -> new RuntimeException("Không tồn tại"));
+            return ResponseEntity.ok().body(stores);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Không tồn tại");
+        }
+    }
+
+    @Override
+    public Page<Stores> findAll(Pageable pageable) {
+        try{
+            return storesDAO.findAll(pageable);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Page.empty(pageable);
+        }
+    }
 }

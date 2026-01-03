@@ -1,5 +1,6 @@
 package Demo.DAO;
 
+import Demo.DAO.DTO.CustomerReportDTO;
 import Demo.Enity.Accounts;
 import Demo.Enity.Users;
 import jakarta.persistence.EntityManager;
@@ -83,4 +84,30 @@ public class UsersDAOImplement implements UsersDAO {
                 .getResultList();
         return result.isEmpty()?null:result.get(0);
     }
+
+    @Override
+    public Page<Users> findAllUsersSeller(Pageable pageable) {
+        Long total = entityManager.createQuery("SELECT COUNT(u) FROM Users u WHERE u.roles.rolesId=2", Long.class)
+                .getSingleResult();
+
+        List<Users> result = entityManager.createQuery("SELECT u FROM Users u WHERE u.roles.rolesId=2 ", Users.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+
+        return new PageImpl<>(result, pageable, total);
+    }
+
+    @Override
+    public Page<Users> findCustomer(Pageable pageable) {
+        Long total = entityManager.createQuery("SELECT COUNT(u) FROM Users u WHERE u.roles.rolesId=3", Long.class)
+                .getSingleResult();
+        List<Users> result = entityManager.createQuery("SELECT u FROM Users u WHERE u.roles.rolesId=3 ", Users.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+        return new PageImpl<>(result, pageable, total);
+    }
+
+
 }

@@ -90,4 +90,19 @@ public class StoresDAOImplement implements StoresDAO {
 
         return new PageImpl<>(result, pageable, total);
     }
+
+    @Override
+    public Optional<Stores> findByUsersId(int usersId) {
+        String jpql = "SELECT s FROM Stores s WHERE s.users.usersId = :usersId";
+
+        try {
+            Stores store = entityManager.createQuery(jpql, Stores.class)
+                    .setParameter("usersId", usersId)
+                    .getSingleResult();
+            return Optional.of(store);
+
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
 }
