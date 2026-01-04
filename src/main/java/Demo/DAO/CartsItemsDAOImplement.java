@@ -21,19 +21,15 @@ public class  CartsItemsDAOImplement implements CartsItemsDAO {
     @Override
     @Transactional
     public void create(CartsItems cartsItems) {
-        entityManager.createNativeQuery("""
-        INSERT INTO carts_items (carts_id, products_stores_id, quantity)
-        VALUES (:cartsId, :productsId, :quantity)""")
+        entityManager.createNativeQuery("INSERT INTO carts_items (carts_id, products_stores_id, quantity)VALUES (:cartsId, :productsId, :quantity)")
                 .setParameter("cartsId", cartsItems.getCarts().getCarts_id())
                 .setParameter("productsId", cartsItems.getProductsStores().getProductsStoresId())
                 .setParameter("quantity", cartsItems.getQuantity())
                 .executeUpdate();
     }
-
     @Override
     public void update(CartsItems cartsItems) {
-        entityManager.createQuery(
-                        "UPDATE CartsItems a SET a.quantity=:quantity WHERE a.cartsItemsId = :cartsItemsId")
+        entityManager.createQuery("UPDATE CartsItems a SET a.quantity=:quantity WHERE a.cartsItemsId = :cartsItemsId")
                 .setParameter("quantity", cartsItems.getQuantity())
                 .setParameter("cartsItemsId", cartsItems.getCartsItemsId())
                 .executeUpdate();
@@ -41,8 +37,7 @@ public class  CartsItemsDAOImplement implements CartsItemsDAO {
 
     @Override
     public void delete(int cartsItemsId) {
-        entityManager.createQuery(
-                        "DELETE FROM CartsItems a WHERE a.cartsItemsId = :cartsItemsId")
+        entityManager.createQuery("DELETE FROM CartsItems a WHERE a.cartsItemsId = :cartsItemsId")
                 .setParameter("cartsItemsId", cartsItemsId)
                 .executeUpdate();
     }

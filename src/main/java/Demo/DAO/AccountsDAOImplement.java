@@ -30,10 +30,7 @@ public class AccountsDAOImplement implements AccountsDAO{
 
     @Override
     public Page<Accounts> findAll(Pageable pageable) {
-        // Query tổng số bản ghi
         Long total = entityManager.createQuery("SELECT COUNT(a) FROM Accounts a",Long.class).getSingleResult();
-
-        // Query lay ket qua theo trang
         List<Accounts> accountsList=entityManager.createQuery("SELECT a FROM Accounts a",Accounts.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())

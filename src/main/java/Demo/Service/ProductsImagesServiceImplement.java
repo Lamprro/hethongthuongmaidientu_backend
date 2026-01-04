@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -31,37 +33,32 @@ public class ProductsImagesServiceImplement implements ProductsImagesService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> uploadImage(MultipartFile file, int productsId)  {
+    public ResponseEntity<?> uploadImage(MultipartFile[] files, int productsId)  {
         try {
             Products products = productsDAO.findById(productsId)
                     .orElseThrow(() -> new RuntimeException("Product không tồn tại"));
-
-            Map uploadResult = cloudinary.uploader().upload(
-                    file.getBytes(),
-                    ObjectUtils.asMap(
-                            "folder", "products/" + productsId
-                    )
-            );
-
-            String imageUrl = uploadResult.get("secure_url").toString();
-            String publicId = uploadResult.get("public_id").toString();
-
-            ProductsImages img = new ProductsImages();
-            img.setImageUrl(imageUrl);
-            img.setPublicId(publicId);
-            img.setProducts(products);
-
-            productsImagesDAO.create(img);
-
-            return ResponseEntity.ok(img);
-
+            List<ProductsImages> images = new ArrayList<>();
+            for (MultipartFile file : files) {
+                Map uploadResult = cloudinary.uploader().upload(
+                        file.getBytes(),
+                        ObjectUtils.asMap(
+                                "folder", "products/" + productsId
+                        )
+                );
+                ProductsImages img = new ProductsImages();
+                img.setImageUrl(uploadResult.get("secure_url").toString());
+                img.setPublicId(uploadResult.get("public_id").toString());
+                img.setProducts(products);
+                productsImagesDAO.create(img);
+                images.add(img);
+            }
+            return ResponseEntity.ok(images);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500)
                     .body(new Notification("Lỗi khi upload ảnh"));
         }
     }
-
     @Override
     @Transactional
     public ResponseEntity<?> deleteImage(int imageId) {
@@ -73,9 +70,7 @@ public class ProductsImagesServiceImplement implements ProductsImagesService {
                     image.getPublicId(),
                     ObjectUtils.emptyMap()
             );
-
             productsImagesDAO.delete(imageId);
-
             return ResponseEntity.ok("Xóa ảnh thành công");
 
         } catch (Exception e) {
@@ -100,17 +95,16 @@ public class ProductsImagesServiceImplement implements ProductsImagesService {
     public ResponseEntity<?> updateImage(int imageId, MultipartFile newFile) {
 
         try {
-            // B1: Lấy ảnh cũ
+
             ProductsImages oldImage = productsImagesDAO.findById(imageId)
                     .orElseThrow(() -> new RuntimeException("Ảnh không tồn tại"));
 
-            // B2: Xóa ảnh cũ trên Cloudinary
             cloudinary.uploader().destroy(
                     oldImage.getPublicId(),
                     ObjectUtils.emptyMap()
             );
 
-            // B3: Upload ảnh mới lên Cloudinary
+
             Map uploadResult = cloudinary.uploader().upload(
                     newFile.getBytes(),
                     ObjectUtils.asMap(
@@ -121,7 +115,7 @@ public class ProductsImagesServiceImplement implements ProductsImagesService {
             String newUrl = uploadResult.get("secure_url").toString();
             String newPublicId = uploadResult.get("public_id").toString();
 
-            // B4: Cập nhật thông tin ảnh mới vào DB
+
             oldImage.setImageUrl(newUrl);
             oldImage.setPublicId(newPublicId);
 

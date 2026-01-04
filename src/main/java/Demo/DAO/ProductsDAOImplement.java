@@ -32,18 +32,10 @@ public class ProductsDAOImplement implements ProductsDAO {
     }
 
     @Override
-    public Page<Products> findByProductsNameAndCategoriesName(
-            String productsName,
-            List<String> categoriesName,
-            Pageable pageable
-    ) {
-
+    public Page<Products> findByProductsNameAndCategoriesName(String productsName, List<String> categoriesName, Pageable pageable) {
         boolean hasCategory = categoriesName != null && !categoriesName.isEmpty();
         boolean hasName = productsName != null && !productsName.isBlank();
-
-        /* ================= COUNT ================= */
         String countJpql;
-
         if (hasCategory) {
             countJpql = """
             SELECT COUNT(DISTINCT p.productsId)
@@ -61,27 +53,20 @@ public class ProductsDAOImplement implements ProductsDAO {
             WHERE (:name IS NULL OR p.productsName LIKE :name)
         """;
         }
-
         var countQuery = entityManager.createQuery(countJpql, Long.class);
-
         countQuery.setParameter(
                 "name",
                 hasName ? "%" + productsName + "%" : null
         );
-
         if (hasCategory) {
             countQuery.setParameter("categories", categoriesName);
             countQuery.setParameter("size", categoriesName.size());
         }
-
         Long total = hasCategory
                 ? (long) countQuery.getResultList().size()
                 : countQuery.getSingleResult();
 
-
-        /* ================= DATA ================= */
         String dataJpql;
-
         if (hasCategory) {
             dataJpql = """
             SELECT DISTINCT p
@@ -99,19 +84,15 @@ public class ProductsDAOImplement implements ProductsDAO {
             WHERE (:name IS NULL OR p.productsName LIKE :name)
         """;
         }
-
         var dataQuery = entityManager.createQuery(dataJpql, Products.class);
-
         dataQuery.setParameter(
                 "name",
                 hasName ? "%" + productsName + "%" : null
         );
-
         if (hasCategory) {
             dataQuery.setParameter("categories", categoriesName);
             dataQuery.setParameter("size", categoriesName.size());
         }
-
         List<Products> result = dataQuery
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())

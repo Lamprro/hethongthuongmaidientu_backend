@@ -41,17 +41,10 @@ public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
     @Override
     public Page<ProductsReviews> findByProductsStoresId(int id, Pageable pageable) {
 
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id",
-                        Long.class
-                )
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id", Long.class)
                 .setParameter("id", id)
                 .getSingleResult();
-
-        List<ProductsReviews> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id",
-                        ProductsReviews.class
-                )
+        List<ProductsReviews> result = entityManager.createQuery("SELECT a FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id", ProductsReviews.class)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -64,20 +57,12 @@ public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
     @Override
     public Page<ProductsReviews> findByRatingAndProductsStoresId(double rating, int id, Pageable pageable) {
 
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsReviews a " +
-                                "WHERE a.rating = :rating AND a.productsStores.productsStoresId = :id",
-                        Long.class
-                )
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsReviews a " + "WHERE a.rating = :rating AND a.productsStores.productsStoresId = :id", Long.class)
                 .setParameter("rating", rating)
                 .setParameter("id", id)
                 .getSingleResult();
 
-        List<ProductsReviews> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsReviews a " +
-                                "WHERE a.rating = :rating AND a.productsStores.productsStoresId = :id",
-                        ProductsReviews.class
-                )
+        List<ProductsReviews> result = entityManager.createQuery("SELECT a FROM ProductsReviews a " + "WHERE a.rating = :rating AND a.productsStores.productsStoresId = :id", ProductsReviews.class)
                 .setParameter("rating", rating)
                 .setParameter("id", id)
                 .setFirstResult((int) pageable.getOffset())
@@ -104,38 +89,27 @@ public class ProductsReviewsDAOImplement implements ProductsReviewsDAO {
             return;
         }
 
-        Double avg = entityManager.createQuery(
-                        "SELECT AVG(a.rating) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id",
-                        Double.class
-                )
+        Double avg = entityManager.createQuery("SELECT AVG(a.rating) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :id", Double.class)
                 .setParameter("id", productsStoresId)
                 .getSingleResult();
 
         if (avg == null) {
             avg = 0.0;
         }
-
         double rounded = Math.round(avg * 10.0) / 10.0;
 
-        ps.setAverageRating(rounded);   // dùng số đã làm tròn
-        entityManager.merge(ps);        // update đúng chuẩn
+        ps.setAverageRating(rounded);
+        entityManager.merge(ps);
     }
 
     @Override
     public Page<ProductsReviews> findByProductsIdAndUsersId(int productsId, int usersId, Pageable pageable) {
-
-        Long total = entityManager.createQuery(
-                        "SELECT COUNT(a) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :productsId AND a.users.usersId= :usersId",
-                        Long.class
-                )
+        Long total = entityManager.createQuery("SELECT COUNT(a) FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :productsId AND a.users.usersId= :usersId", Long.class)
                 .setParameter("productsId", productsId)
                 .setParameter("usersId", usersId)
                 .getSingleResult();
 
-        List<ProductsReviews> result = entityManager.createQuery(
-                        "SELECT a FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :productsId AND a.users.usersId= :usersId",
-                        ProductsReviews.class
-                )
+        List<ProductsReviews> result = entityManager.createQuery("SELECT a FROM ProductsReviews a WHERE a.productsStores.productsStoresId = :productsId AND a.users.usersId= :usersId", ProductsReviews.class)
                 .setParameter("productsId", productsId)
                 .setParameter("usersId", usersId)
                 .setFirstResult((int) pageable.getOffset())

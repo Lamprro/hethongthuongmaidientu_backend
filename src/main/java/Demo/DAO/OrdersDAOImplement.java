@@ -27,8 +27,7 @@ public class OrdersDAOImplement implements OrdersDAO{
 
     @Override
     public void update(Orders orders) {
-        entityManager.createQuery(
-                        "UPDATE Orders a SET a.totalAmount=:totalAmount WHERE a.ordersId = :ordersId")
+        entityManager.createQuery("UPDATE Orders a SET a.totalAmount=:totalAmount WHERE a.ordersId = :ordersId")
                 .setParameter("totalAmount", orders.getTotalAmount())
                 .setParameter("ordersId", orders.getOrdersId())
                 .executeUpdate();

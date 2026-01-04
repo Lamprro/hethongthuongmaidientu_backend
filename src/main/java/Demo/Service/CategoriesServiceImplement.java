@@ -22,7 +22,6 @@ public class CategoriesServiceImplement implements CategoriesService {
     @Autowired
     private CategoriesDAO categoriesDAO;
 
-
     @Override
     public Page<Categories> findAll(Pageable pageable) {
         return categoriesDAO.findAll(pageable);
@@ -37,7 +36,6 @@ public class CategoriesServiceImplement implements CategoriesService {
     @Transactional
     public ResponseEntity<?> create(Categories categories) {
         try{
-
             categoriesDAO.save(categories);
             return ResponseEntity.ok("Lưu Categories thành công");
         } catch (Exception e) {

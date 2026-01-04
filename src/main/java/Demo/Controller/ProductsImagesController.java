@@ -16,8 +16,8 @@ public class ProductsImagesController {
     private ProductsImagesService productsImagesService;
 
     @PostMapping("/upload/{productId}")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @PathVariable int productId) {
-        return productsImagesService.uploadImage(file, productId);
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile[] files, @PathVariable int productId) {
+        return productsImagesService.uploadImage(files, productId);
     }
 
     @DeleteMapping("/delete/{imageId}")

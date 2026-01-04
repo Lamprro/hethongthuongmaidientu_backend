@@ -46,8 +46,7 @@ public class UsersDAOImplement implements UsersDAO {
                 .getSingleResult();
 
         // Lấy danh sách người dùng theo trang
-        List<Users> result = entityManager.createQuery(
-                        "SELECT u FROM Users u WHERE LOWER(u.usersName) LIKE LOWER(:name)", Users.class)
+        List<Users> result = entityManager.createQuery("SELECT u FROM Users u WHERE LOWER(u.usersName) LIKE LOWER(:name)", Users.class)
                 .setParameter("name", "%" + name + "%")
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())

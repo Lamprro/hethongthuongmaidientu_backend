@@ -31,8 +31,6 @@ public class ProductsStoresServiceImplement implements ProductsStoresService {
                 .orElseThrow(() -> new RuntimeException("Store không tồn tại"));
             Products products = productsDAO.findById(productsStores.getProducts().getProductsId())
                 .orElseThrow(() -> new RuntimeException("Products không tồn tại"));
-
-
             productsStores.setProducts(products);
             productsStores.setStores(stores);
             productsStoresDAO.create(productsStores);

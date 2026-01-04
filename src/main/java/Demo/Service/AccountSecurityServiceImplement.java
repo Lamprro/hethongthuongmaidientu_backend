@@ -30,7 +30,7 @@ public class AccountSecurityServiceImplement implements AccountSecurityService{
 
     @Autowired
     @Lazy
-    private BCryptPasswordEncoder passwordEncoder; // ← Thêm dòng này
+    private BCryptPasswordEncoder passwordEncoder;
     @Override
     public Accounts findByUsername(String username) {
         return accountsDAO.findByUsername(username);

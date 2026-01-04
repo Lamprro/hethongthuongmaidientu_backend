@@ -38,7 +38,6 @@ public class ProductsImagesDAOImplement implements ProductsImagesDAO{
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
-
         return new PageImpl<>(result,pageable,total);
     }
 

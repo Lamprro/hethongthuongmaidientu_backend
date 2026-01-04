@@ -32,12 +32,10 @@ public class PromotionsDAOImplement implements PromotionsDAO {
     @Override
     public Page<Promotions> findByStoresId(int id, Pageable pageable) {
         if (pageable.isUnpaged()) {
-            List<Promotions> result = entityManager.createQuery(
-                            "SELECT a FROM Promotions a WHERE a.stores.storesId = :id", Promotions.class)
+            List<Promotions> result = entityManager.createQuery("SELECT a FROM Promotions a WHERE a.stores.storesId = :id", Promotions.class)
                     .setParameter("id", id)
                     .getResultList();
-
-            return new PageImpl<>(result); // không cần pageable, không cần total
+            return new PageImpl<>(result);
         }
 
         Long total = entityManager.createQuery("SELECT COUNT(a) FROM Promotions a WHERE a.stores.storesId = :id", Long.class)
@@ -87,18 +85,14 @@ public class PromotionsDAOImplement implements PromotionsDAO {
     }
     @Override
     public List<Promotions> findExpiredPromotions() {
-        return entityManager.createQuery(
-                "SELECT p FROM Promotions p WHERE p.endedAt < CURRENT_TIMESTAMP ",
-                Promotions.class
-        ).getResultList();
+        return entityManager.createQuery("SELECT p FROM Promotions p WHERE p.endedAt < CURRENT_TIMESTAMP ", Promotions.class)
+                .getResultList();
     }
 
     @Override
     public List<Promotions> findExistPromotions() {
-        return entityManager.createQuery(
-                "SELECT p FROM Promotions p WHERE p.endedAt > CURRENT_TIMESTAMP ",
-                Promotions.class
-        ).getResultList();
+        return entityManager.createQuery("SELECT p FROM Promotions p WHERE p.endedAt > CURRENT_TIMESTAMP ", Promotions.class)
+                .getResultList();
     }
 
 

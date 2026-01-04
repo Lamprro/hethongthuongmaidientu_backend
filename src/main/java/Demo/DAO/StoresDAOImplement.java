@@ -34,7 +34,6 @@ public class StoresDAOImplement implements StoresDAO {
     @Override
     public Optional<Stores> findById(int id) {
         String jpql = "SELECT s FROM Stores s WHERE s.storesId = :id";
-
         try {
             Stores store = entityManager.createQuery(jpql, Stores.class)
                     .setParameter("id", id)
