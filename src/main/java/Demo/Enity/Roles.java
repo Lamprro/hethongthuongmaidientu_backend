@@ -1,6 +1,7 @@
 package Demo.Enity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name="roles")
@@ -10,6 +11,7 @@ public class Roles {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int rolesId;
 
+    @Nationalized
     @Column(name="role_name")
     private String roleName;
 

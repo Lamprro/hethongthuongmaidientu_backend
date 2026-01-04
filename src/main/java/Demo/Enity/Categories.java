@@ -1,6 +1,7 @@
 package Demo.Enity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Nationalized;
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -13,9 +14,11 @@ public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoriesId;
 
+    @Nationalized
     @Column(name="categories_name")
     private String categoriesName;
 
+    @Nationalized
     @Column(name="description")
     private String description;
 

@@ -1,6 +1,7 @@
 package Demo.Enity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Nationalized;
 import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class ProductsReviews {
     @Column(name="rating")
     private double rating;
 
+    @Nationalized
     @Column(name="comment")
     private String comment;
 

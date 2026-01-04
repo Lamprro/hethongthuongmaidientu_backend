@@ -1,6 +1,7 @@
 package Demo.Enity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,7 @@ public class Orders {
     @Column(name="created_at")
     private LocalDateTime createdAt;
 
+    @Nationalized
     @Column(name="shipping_address")
     private String shippingAddress;
 

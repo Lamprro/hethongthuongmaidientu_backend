@@ -1,6 +1,7 @@
 package Demo.Enity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 
@@ -12,9 +13,11 @@ public class Stores {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int storesId;
 
+    @Nationalized
     @Column(name = "stores_name")
     private String storesName;
 
+    @Nationalized
     @Column(name = "stores_address")
     private String storesAddress;
 

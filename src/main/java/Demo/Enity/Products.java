@@ -1,6 +1,7 @@
 package Demo.Enity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Nationalized;
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -13,9 +14,11 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productsId;
 
+    @Nationalized
     @Column(name="products_name")
     private String productsName;
 
+    @Nationalized
     @Column(name="description")
     private String description;
 

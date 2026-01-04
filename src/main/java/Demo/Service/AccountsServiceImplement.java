@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
@@ -80,7 +82,11 @@ public class AccountsServiceImplement implements AccountsService{
                 cartsService.create(users.getUsersId());
             }
 
-            return ResponseEntity.ok("Đăng kí thành công");
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Đăng kí thành công");
+            response.put("usersId", users.getUsersId()); // Quan trọng: Phải trả về ID vừa tạo
+
+            return ResponseEntity.ok(response);
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body(new Notification("Lỗi hệ thống"));
