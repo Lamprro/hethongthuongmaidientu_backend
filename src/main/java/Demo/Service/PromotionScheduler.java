@@ -37,4 +37,21 @@ public class PromotionScheduler {
 
         }
     }
+    @Scheduled(fixedRate = 60000) // chạy mỗi 60 giây
+    @Transactional
+    public void checkExistPromotions() {
+
+        List<Promotions> promotions = promotionsDAO.findExistPromotions();
+
+        for (Promotions promo : promotions) {
+            List<ProductsStores> list = productsStoresDAO.findByStoresId(promo.getStores().getStoresId(), Pageable.unpaged()).getContent();
+
+            for (ProductsStores ps : list) {
+                ps.setPrice(ps.getOriginalPrice()*(100-promo.getDiscountPercent())); // trả về giá gốc
+                productsStoresDAO.update(ps);
+            }
+
+        }
+    }
+
 }

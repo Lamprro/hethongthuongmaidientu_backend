@@ -38,67 +38,81 @@ public class ProductsDAOImplement implements ProductsDAO {
             Pageable pageable
     ) {
 
-        // ---------- COUNT ----------
-        String countJpql = """
-        SELECT COUNT(DISTINCT p.productsId)
-        FROM Products p
-        WHERE (:name IS NULL OR p.productsName LIKE :name)
-        AND (
-            :categories IS NULL OR
-            p.productsId IN (
-                SELECT p2.productsId
-                FROM Products p2
-                JOIN p2.categories c2
-                WHERE c2.categoriesName IN :categories
-                GROUP BY p2.productsId
-                HAVING COUNT(DISTINCT c2.categoriesName) = :size
-            )
-        )
-    """;
+        boolean hasCategory = categoriesName != null && !categoriesName.isEmpty();
+        boolean hasName = productsName != null && !productsName.isBlank();
 
-        Long total = entityManager.createQuery(countJpql, Long.class)
-                .setParameter("name",
-                        productsName == null || productsName.isBlank()
-                                ? null
-                                : "%" + productsName + "%")
-                .setParameter("categories",
-                        categoriesName == null || categoriesName.isEmpty()
-                                ? null
-                                : categoriesName)
-                .setParameter("size",
-                        categoriesName == null ? 0 : categoriesName.size())
-                .getSingleResult();
+        /* ================= COUNT ================= */
+        String countJpql;
+
+        if (hasCategory) {
+            countJpql = """
+            SELECT COUNT(DISTINCT p.productsId)
+            FROM Products p
+            JOIN p.categories c
+            WHERE (:name IS NULL OR p.productsName LIKE :name)
+            AND c.categoriesName IN :categories
+            GROUP BY p.productsId
+            HAVING COUNT(DISTINCT c.categoriesName) = :size
+        """;
+        } else {
+            countJpql = """
+            SELECT COUNT(p)
+            FROM Products p
+            WHERE (:name IS NULL OR p.productsName LIKE :name)
+        """;
+        }
+
+        var countQuery = entityManager.createQuery(countJpql, Long.class);
+
+        countQuery.setParameter(
+                "name",
+                hasName ? "%" + productsName + "%" : null
+        );
+
+        if (hasCategory) {
+            countQuery.setParameter("categories", categoriesName);
+            countQuery.setParameter("size", categoriesName.size());
+        }
+
+        Long total = hasCategory
+                ? (long) countQuery.getResultList().size()
+                : countQuery.getSingleResult();
 
 
-        // ---------- DATA ----------
-        String dataJpql = """
-        SELECT DISTINCT p
-        FROM Products p
-        WHERE (:name IS NULL OR p.productsName LIKE :name)
-        AND (
-            :categories IS NULL OR
-            p.productsId IN (
-                SELECT p2.productsId
-                FROM Products p2
-                JOIN p2.categories c2
-                WHERE c2.categoriesName IN :categories
-                GROUP BY p2.productsId
-                HAVING COUNT(DISTINCT c2.categoriesName) = :size
-            )
-        )
-    """;
+        /* ================= DATA ================= */
+        String dataJpql;
 
-        List<Products> result = entityManager.createQuery(dataJpql, Products.class)
-                .setParameter("name",
-                        productsName == null || productsName.isBlank()
-                                ? null
-                                : "%" + productsName + "%")
-                .setParameter("categories",
-                        categoriesName == null || categoriesName.isEmpty()
-                                ? null
-                                : categoriesName)
-                .setParameter("size",
-                        categoriesName == null ? 0 : categoriesName.size())
+        if (hasCategory) {
+            dataJpql = """
+            SELECT DISTINCT p
+            FROM Products p
+            JOIN p.categories c
+            WHERE (:name IS NULL OR p.productsName LIKE :name)
+            AND c.categoriesName IN :categories
+            GROUP BY p
+            HAVING COUNT(DISTINCT c.categoriesName) = :size
+        """;
+        } else {
+            dataJpql = """
+            SELECT p
+            FROM Products p
+            WHERE (:name IS NULL OR p.productsName LIKE :name)
+        """;
+        }
+
+        var dataQuery = entityManager.createQuery(dataJpql, Products.class);
+
+        dataQuery.setParameter(
+                "name",
+                hasName ? "%" + productsName + "%" : null
+        );
+
+        if (hasCategory) {
+            dataQuery.setParameter("categories", categoriesName);
+            dataQuery.setParameter("size", categoriesName.size());
+        }
+
+        List<Products> result = dataQuery
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

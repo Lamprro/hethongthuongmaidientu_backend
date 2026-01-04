@@ -2,6 +2,7 @@ package Demo.DAO;
 
 import Demo.Enity.CartsItems;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,19 +13,30 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CartsItemsDAOImplement implements CartsItemsDAO {
+public class  CartsItemsDAOImplement implements CartsItemsDAO {
 
     @Autowired
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public void create(CartsItems cartsItems) {
-        entityManager.persist(cartsItems);
+        entityManager.createNativeQuery("""
+        INSERT INTO carts_items (carts_id, products_stores_id, quantity)
+        VALUES (:cartsId, :productsId, :quantity)""")
+                .setParameter("cartsId", cartsItems.getCarts().getCarts_id())
+                .setParameter("productsId", cartsItems.getProductsStores().getProductsStoresId())
+                .setParameter("quantity", cartsItems.getQuantity())
+                .executeUpdate();
     }
 
     @Override
     public void update(CartsItems cartsItems) {
-        entityManager.merge(cartsItems);
+        entityManager.createQuery(
+                        "UPDATE CartsItems a SET a.quantity=:quantity WHERE a.cartsItemsId = :cartsItemsId")
+                .setParameter("quantity", cartsItems.getQuantity())
+                .setParameter("cartsItemsId", cartsItems.getCartsItemsId())
+                .executeUpdate();
     }
 
     @Override

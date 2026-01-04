@@ -53,7 +53,7 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
                         .orElseThrow(() -> new RuntimeException("Store không tồn tại"));
                 Orders orders = new Orders();
                 orders.setUsers(users);
-                orders.setStatus(0);
+                orders.setStatus(1);
                 orders.setCreatedAt(LocalDateTime.now());
                 orders.setPaymentMethod("MONEY");
                 orders.setStores(stores);
@@ -71,6 +71,7 @@ public class OrdersDetailsServiceImplement implements OrdersDetailsService {
                     }
                     else{
                         productsStores.setQuantity(productsStores.getQuantity()-o.getQuantity());
+                        productsStoresDAO.update(productsStores);
                     ordersDetailsDAO.create(o);
                     }
                 }

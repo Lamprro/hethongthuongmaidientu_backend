@@ -14,4 +14,5 @@ public interface PromotionsDAO {
     public Page<Promotions> findAll(Pageable pageable);
     public void updateProductsStoresPrice(int storesId,double discount);
     public List<Promotions> findExpiredPromotions();
+    public List<Promotions> findExistPromotions();
 }

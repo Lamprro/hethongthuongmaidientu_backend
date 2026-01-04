@@ -93,4 +93,13 @@ public class PromotionsDAOImplement implements PromotionsDAO {
         ).getResultList();
     }
 
+    @Override
+    public List<Promotions> findExistPromotions() {
+        return entityManager.createQuery(
+                "SELECT p FROM Promotions p WHERE p.endedAt > CURRENT_TIMESTAMP ",
+                Promotions.class
+        ).getResultList();
+    }
+
+
 }
